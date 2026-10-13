@@ -1,0 +1,25 @@
+ID;Obligatie;Etapa;Temei legal;Clasa risc;n;Amenda medie (lei);Costuri conexe (lei);Probabilitate anuala;EAE (lei/an);EMax (lei);CCA an 1 (lei);CCA recurent (lei);Materialitate;Prioritate
+R01;CIM scris inainte de inceperea activitatii;P1.5;Art. 16 (1), 260 (1) e, 264 (4) CM;R4;3;40000;15000;0,27;36450;1000000 + sistare + penal;1800;1800;M-P;1
+R02;Transmitere REGES anterior inceperii;P1.6;Art. 16 (2), 260 (1) e1 CM; HG 295/2025 art. 9;R4;3;40000;15000;0,27;36450;1000000 + sistare;300;300;M-P;1
+R03;Verificare varsta / drept de munca;P1.1;Art. 13, 265 CM;R4;1;penal;pierdere ajutoare publice, interdictie achizitii;0,27;nemonetizat;penal;300;300;M-P;1
+R04;Examen medical la angajare;P1.4;Art. 27, 260 (1) m CM; L.319/2006;R4;1;2250;penal la accident;0,27;608;3000 + nulitate CIM + penal;1300;1300;M-P;1
+R05;Salariul minim garantat in plata;P3.3;Art. 164, 260 (1) a, 264 (1) CM;R4;20;4000;diferente salariale 3 ani;0,27;21600;200000 + penal;1200;1200;M-P;1
+R06;Fara munca subdeclarata;P3.5;Art. 15^2, 260 (1) e4 CM; art. 9 L.241/2005;R4;5;9000;contributii + accesorii;0,18;8100;100000 + penal 2-8 ani;600;600;M-P;1
+R07;D112 si virare contributii in max 60 zile;P3.6;Art. 6^1 L.241/2005;R4;-;penal;accesorii fiscale;0,0665;3000 + penal;penal 1-5 ani;2400;2400;M-P;1
+R08;Fara primire la munca pe durata suspendarii;P6.3;Art. 15^1 c, 260 (1) e2 CM;R4;2;40000;15000;0,27;25650;1000000 + sistare;200;200;M-P;1
+R09;Acces si documente la controlul ITM;P8.1-8.2;Art. 264 (2)-(3) CM;R4;1;6500;penal;0,09;585 + penal;penal;1200;1200;M-P;1
+R10;Instruire SSM la angajare;P1.9;Art. 20 L.319/2006;R4;1;5000;penal la accident;0,15;750 + penal;penal;600;600;M-P;1
+R11;Timp partial: fara munca in afara programului;P2;Art. 105, 260 (1) e3 CM;R3;2;12500;recalificare norma intreaga;0,27;6750;200000;200;200;M-E;2
+R12;Copia CIM la locul de munca;P1.8;Art. 16 (4), 260 (1) q CM;R3;1;10000;0;0,27;2700;10000;500;500;M-E;2
+R13;Concediere: procedura si decizie;P7.3-7.4;Art. 58-80 CM;R3;3;-;81600 per caz (despagubiri + onorarii);0,15;36700;250000;3800;3800;M-E;2
+R14;Pontaj zilnic si limite timp de munca;P3.1-3.2;Art. 119, 112-137, 260 (1) i j l m CM;R2-R3;5;2250 + 5x2250;litigii ore suplimentare;0,27;8645;50000+;3700;3700;M-E;2
+R15;Plata salariului la termen;P3.4;Art. 166, 260 (1) CM;R3;5;7500;daune-interese;0,27;10125;500000;600;600;M-E;2
+R16;Act aditional + REGES la modificari;P5.1-5.3;Art. 17 (5), 41 CM; HG 295/2025 art. 4, 9;R2-R3;1;6500;5000;0,27;3105;8000 + litigii;1000;1000;M-E;2
+R17;Suspendari transmise in termen;P6.2;HG 295/2025 art. 4, 9;R2;3;4000;0;0,27;3240;50000;2000;2000;M-E;2
+R18;Informare art. 17 si clauze conforme;P1.2-1.3, P2;Art. 17, 19, 260 (1) d CM;R2;1;3500;2667 (litigii clauze);0,27;3612;20000 + recalificari;1800;600;M-E;2
+R19;GDPR dosar personal;P4.4;Art. 5, 13, 32, 83 GDPR;R3;1;25000;notificare incident;0,056;1400;20 mil EUR / 4% CA;2800;400;N an 1 / M-E recurent;2
+R20;Dosar personal complet, la sediu;P4.1-4.2;HG 295/2025 art. 8, 9;R2;1;4500;inclus in R13;0,27;1215;6000;3000;3000;N;3
+R21;Exemplar CIM inmanat salariatului;P1.7;Art. 16 (3), 260 (1) p CM;R2;1;1750;0;0,27;473;2000;120;120;M-E;3
+R22;Adeverinte / copii in 15 zile lucratoare;P4.3, P7.8;Art. 34 (5), 260 (1) b CM; HG 295/2025 art. 8;R1;1;650;0;0,27;176;1000;500;500;N;3
+R23;Arhivare 5 ani state de salarii;P4.5;Art. 25 L.82/1991;R2;1;3000;pierderea probei;0,07;210;5000;500;500;N;3
+R24;Inregistrarea demisiei;P7.5;Art. 81, 260 (1) CM;R2;1;2250;0;0,27;608;3000;100;100;M-E;3
