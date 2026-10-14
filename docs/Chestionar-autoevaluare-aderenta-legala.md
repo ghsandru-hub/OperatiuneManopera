@@ -1,6 +1,6 @@
 # CHESTIONAR DE AUTOEVALUARE – GRADUL DE ADERENȚĂ LA CADRUL LEGAL
 
-**Domenii:** gestionarea CIM, evidența consumului de manoperă, gestionarea beneficiilor salariale, calculul salarial  
+**Domenii:** gestionarea CIM, evidența consumului de manoperă, gestionarea beneficiilor salariale, calculul salarial, cadrul de reglementare internă  
 **Cod:** CAE-RM-01 · **Versiune:** 1.0 · **Cadru legal verificat:** 13 octombrie 2026 · **Document corelat:** PCL-CIM-01
 
 ## 1. Mod de completare
@@ -39,12 +39,11 @@
 | A11 | Concedierile respectă interdicțiile art. 60, cercetarea disciplinară sau evaluarea prealabilă, termenele, preavizul de minimum 20 zile lucrătoare și conținutul obligatoriu al deciziei; fiecare concediere are aviz juridic scris. | Art. 58–80, 251–252 CM | R3 | Dosare de concediere; avize juridice | ☐ | ☐ | ☐ | ☐ | |
 | A12 | Încetările se transmit în REGES în termen, cu temeiul exact; adeverința de vechime și extrasul REGES se eliberează la încetare sau în 15 zile lucrătoare de la cerere. | HG 295/2025 art. 4, 8; art. 34 alin. (5) CM | R2 | Jurnal REGES încetări; registru adeverințe | ☐ | ☐ | ☐ | ☐ | |
 | A13 | Dosarul personal al fiecărui salariat este complet (opis cu conținutul minim) și disponibil la sediu sau la punctul de lucru. | HG 295/2025 art. 8–9 | R2 | Sondaj pe dosare | ☐ | ☐ | ☐ | ☐ | |
-| A14 | Regulamentul intern este întocmit, actualizat și adus la cunoștință sub semnătură; fișele de post sunt semnate și anexate la CIM. | Art. 241–246, art. 17 alin. (3) lit. d) CM | R2 | Tabel de luare la cunoștință; fișe de post | ☐ | ☐ | ☐ | ☐ | |
-| A15 | Prelucrarea datelor din dosarul personal respectă GDPR: informare la angajare, minimizare, acces restricționat, termene de păstrare, registru de prelucrări. | Regulamentul (UE) 2016/679 art. 5, 13, 30, 32; Legea 190/2018 | R3 | Informări semnate; politica de retenție | ☐ | ☐ | ☐ | ☐ | |
-| A16 | Vârsta minimă (16 ani; 15 cu acordul părinților) și dreptul de muncă al cetățenilor non-UE sunt verificate documentar înainte de angajare. | Art. 13, 265 CM; OG 25/2014 | R4 | Copii acte de identitate; avize/permise de muncă | ☐ | ☐ | ☐ | ☐ | |
-| A17 | La controlul ITM accesul este permis imediat, iar documentele se prezintă la prima solicitare; există persoană desemnată și instruită. | Art. 254, 264 alin. (2)–(3) CM | R4 | Procedura de control; desemnare scrisă | ☐ | ☐ | ☐ | ☐ | |
+| A14 | Prelucrarea datelor din dosarul personal respectă GDPR: informare la angajare, minimizare, acces restricționat, termene de păstrare, registru de prelucrări. | Regulamentul (UE) 2016/679 art. 5, 13, 30, 32; Legea 190/2018 | R3 | Informări semnate; politica de retenție | ☐ | ☐ | ☐ | ☐ | |
+| A15 | Vârsta minimă (16 ani; 15 cu acordul părinților) și dreptul de muncă al cetățenilor non-UE sunt verificate documentar înainte de angajare. | Art. 13, 265 CM; OG 25/2014 | R4 | Copii acte de identitate; avize/permise de muncă | ☐ | ☐ | ☐ | ☐ | |
+| A16 | La controlul ITM accesul este permis imediat, iar documentele se prezintă la prima solicitare; există persoană desemnată și instruită. | Art. 254, 264 alin. (2)–(3) CM | R4 | Procedura de control; desemnare scrisă | ☐ | ☐ | ☐ | ☐ | |
 
-Punctaj maxim ponderat domeniul A: **51** · Grad de aderență A = punctaj obținut / punctaj maxim aplicabil × 100
+Punctaj maxim ponderat domeniul A: **49** · Grad de aderență A = punctaj obținut / punctaj maxim aplicabil × 100
 
 ### B. Evidența consumului de manoperă (timp de muncă)
 
@@ -118,15 +117,41 @@ Punctaj maxim ponderat domeniul C: **32** · Grad de aderență C = punctaj obț
 
 Punctaj maxim ponderat domeniul D: **47** · Grad de aderență D = punctaj obținut / punctaj maxim aplicabil × 100
 
+### E. Cadrul de reglementare internă
+
+| Nr. | Cerință | Temei legal | Clasă | Dovadă de verificat | Da | Parțial | Nu | N.A. | Observații |
+|---|---|---|---|---|---|---|---|---|---|
+| E1 | Regulamentul intern există și cuprinde conținutul minim obligatoriu: reguli SSM, respectarea nediscriminării și a demnității, drepturile și obligațiile părților, procedura de soluționare a cererilor și reclamațiilor, regulile de disciplină, abaterile și sancțiunile, procedura disciplinară, criteriile și procedurile de evaluare profesională, regulile privind hărțuirea. | Art. 241–242 CM; HG 970/2023 (metodologia privind hărțuirea) | R2 | Regulamentul intern în vigoare, cu dată și semnătură | ☐ | ☐ | ☐ | ☐ | |
+| E2 | Regulamentul intern a fost consultat cu sindicatul sau reprezentanții salariaților, este adus la cunoștința fiecărui salariat (la angajare, sub semnătură) și afișat; modificările sunt comunicate în aceleași condiții. | Art. 241, 243 CM | R2 | Tabel de luare la cunoștință; dovada afișării | ☐ | ☐ | ☐ | ☐ | |
+| E3 | La angajatorii cu cel puțin 10 salariați, negocierea colectivă este inițiată obligatoriu (cu cel puțin 45 zile înainte de expirarea CCM), procesul-verbal al negocierii este încheiat, iar CCM încheiat este înregistrat la ITM; durata CCM este între 12 și 24 luni. | Legea 367/2022 art. 97, 100, 106, 110 [V] | R3 | Convocări, procese-verbale, CCM înregistrat | ☐ | ☐ | ☐ | ☐ | |
+| E4 | CCM aplicabil (unitate sau sector, dacă este extins prin ordin) este identificat, iar clauzele sale (sporuri, concedii suplimentare, beneficii, timp de muncă) sunt reflectate în CIM, regulamentul intern și statele de plată; niciun CIM nu conține drepturi sub nivelul CCM. | Art. 11, 132 CM; Legea 367/2022 art. 102, 108 [V] | R3 | Comparație CCM – CIM – state | ☐ | ☐ | ☐ | ☐ | |
+| E5 | Fiecare funcție are fișă de post conformă COR, cu atribuții, criterii de evaluare, cerințe SSM, relații ierarhice; fișele sunt semnate, anexate la CIM și actualizate la fiecare modificare a felului muncii. | Art. 17 alin. (3) lit. d)–e), art. 41 CM | R2 | Fișe de post semnate; opis dosare | ☐ | ☐ | ☐ | ☐ | |
+| E6 | Organigrama, statul de funcții și regulamentul de organizare și funcționare sunt aprobate de reprezentantul legal, datate și arhivate la fiecare modificare; ele susțin cauza reală și serioasă a concedierilor pentru desființarea postului. | Art. 40 alin. (1) lit. a), art. 65 CM | R2 | Organigrame succesive aprobate | ☐ | ☐ | ☐ | ☐ | |
+| E7 | Criteriile și procedura de evaluare profesională sunt stabilite în regulamentul intern sau CCM, comunicate la angajare, aplicate periodic, cu rezultate scrise comunicate salariatului. | Art. 17 alin. (3) lit. e), art. 63 alin. (2), art. 242 lit. i) CM | R2 | Fișe de evaluare semnate | ☐ | ☐ | ☐ | ☐ | |
+| E8 | Procedura disciplinară internă este formalizată conform legii (convocare scrisă, comisie, dreptul la apărare și asistență, termene de 30 zile / 6 luni, conținutul deciziei) și există evidența sancțiunilor cu radierea lor după 12 luni. | Art. 247–252 CM | R2 | Procedura în regulamentul intern; registrul sancțiunilor | ☐ | ☐ | ☐ | ☐ | |
+| E9 | Politica de prevenire și combatere a hărțuirii (pe criteriul de sex și morale) este adoptată, cu procedură de sesizare, persoană responsabilă, instruire și evidența sesizărilor. | Legea 202/2002 art. 2; OG 137/2000 art. 2 alin. (5¹)–(5⁷) (Legea 167/2020); HG 970/2023 [V sancțiuni] | R3 | Politica aprobată; registrul sesizărilor; dovezi instruire | ☐ | ☐ | ☐ | ☐ | |
+| E10 | La angajatorii cu cel puțin 50 salariați există canalul intern de raportare a avertizărilor de integritate, persoana desemnată, registrul raportărilor și procedura de protecție a avertizorului. | Legea 361/2022 art. 6, 9–10 [V] | R2 | Procedura aprobată; desemnare; registru | ☐ | ☐ | ☐ | ☐ | |
+| E11 | Politica internă de protecție a datelor este adoptată: registrul prelucrărilor, informările pentru salariați, procedura de răspuns la cereri, iar monitorizarea salariaților (video, e-mail, acces) este reglementată în regulamentul intern cu informare prealabilă și consultarea reprezentanților. | GDPR art. 13, 30, 32; Legea 190/2018 art. 5 | R3 | Politica GDPR; clauzele de monitorizare din RI | ☐ | ☐ | ☐ | ☐ | |
+| E12 | Instrucțiunile proprii SSM, planul de prevenire și protecție și evaluarea riscurilor sunt aprobate prin decizie; comitetul SSM este constituit la angajatorii cu cel puțin 50 salariați. | Legea 319/2006 art. 13 lit. b), e); HG 1425/2006 art. 57 [V] | R3 | Decizii; plan de prevenire; procese-verbale comitet | ☐ | ☐ | ☐ | ☐ | |
+| E13 | La angajatorii cu cel puțin 20 salariați există planul anual de formare profesională, consultat cu sindicatul sau reprezentanții salariaților și anexat la CCM; participarea la formare este asigurată cel puțin o dată la 2 ani (sau 3 ani sub 21 salariați) și evidențiată. | Art. 194–195 CM | R1 | Plan de formare; evidența participării | ☐ | ☐ | ☐ | ☐ | |
+| E14 | Reprezentanții salariaților sunt aleși (angajatori cu peste 20 salariați, fără sindicat) sau sindicatul este recunoscut, iar consultările obligatorii (regulament intern, CCM, concedieri colective, plan de formare, monitorizare) sunt documentate. | Art. 221–226 CM; Legea 367/2022 | R2 | Proces-verbal de alegere; convocări și minute de consultare | ☐ | ☐ | ☐ | ☐ | |
+| E15 | Politicile privind telemunca, programul flexibil sau individualizat și utilizarea echipamentelor IT sunt formalizate în regulamentul intern sau CIM, dacă se aplică. | Legea 81/2018; art. 118 CM | R1 | Politica / clauzele aplicabile | ☐ | ☐ | ☐ | ☐ | |
+| E16 | Nomenclatorul arhivistic este întocmit și aprobat, iar politica de retenție este corelată cu termenele legale (5 ani state de salarii, dosare personale, REGES, documente SSM). | Legea 16/1996 art. 8; art. 25 Legea 82/1991 | R1 | Nomenclator aprobat; politica de retenție | ☐ | ☐ | ☐ | ☐ | |
+| E17 | Deciziile interne (numire, delegare de competențe, persoane desemnate pentru REGES și pentru controlul ITM, comisii) sunt numerotate, datate, semnate de reprezentantul legal și ținute într-un registru. | Art. 40 CM; HG 295/2025 art. 2 [V] | R1 | Registrul deciziilor | ☐ | ☐ | ☐ | ☐ | |
+| E18 | Codul de conduită, regulile privind conflictul de interese, confidențialitatea și clauzele de neconcurență sunt coerente cu CIM și cu limitele legale. | Art. 21–26 CM | R1 | Codul de conduită; clauze CIM | ☐ | ☐ | ☐ | ☐ | |
+
+Punctaj maxim ponderat domeniul E: **36** · Grad de aderență E = punctaj obținut / punctaj maxim aplicabil × 100
+
 ## 4. Sinteză
 
 | Domeniu | Întrebări | Punctaj maxim ponderat | Punctaj obținut | Grad de aderență | Neconformități critice (R4) | Prioritate 2 (R3 = Nu) |
 |---|---|---|---|---|---|---|
-| A. Gestiune CIM | 17 | 51 | | | | |
+| A. Gestiune CIM | 16 | 49 | | | | |
 | B. Consum manoperă | 17 | 39 | | | | |
 | C. Beneficii | 15 | 32 | | | | |
 | D. Calcul salarial | 19 | 47 | | | | |
-| **Total** | 68 | 169 | | | | |
+| E. Reglementări interne | 18 | 36 | | | | |
+| **Total** | 85 | 203 | | | | |
 
 ## 5. Plan de remediere
 

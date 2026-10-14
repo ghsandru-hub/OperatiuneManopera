@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Autoevaluare CAE-RM-01</title>
+<meta name="description" content="Chestionar de autoevaluare a gradului de aderență la cadrul legal: gestiune CIM, consum manoperă, beneficii salariale, calcul salarial, reglementări interne">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;600&display=swap">
+<style>
+/* Layout: audit worksheet. Sticky score strip, four numbered sections of question rows, results panel at the end. Same token family as PCL-CIM-01. */
+:root{
+  --bg:#f7f6f2; --paper:#fffdf9; --fg:#1d2430; --muted:#5b6475; --rule:#d9d5cb;
+  --ink:#1f3a5f; --ink-soft:#e3ebf5; --amber:#9a5b00; --amber-soft:#fbefd6;
+  --r1:#3d6b3a; --r1s:#e2efe0; --r2:#7a6a00; --r2s:#f3eec9; --r3:#a3501a; --r3s:#f8e3d3; --r4:#8f1f2b; --r4s:#f6dcdf;
+  --good:#2f6b3a; --warn:#9a5b00; --bad:#8f1f2b; --code:#edeae2;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"Source Code Pro",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#151a22; --paper:#1c222c; --fg:#e8e6df; --muted:#a3abb8; --rule:#333b48;
+  --ink:#9dbbe0; --ink-soft:#243247; --amber:#e8b35a; --amber-soft:#3b2e13;
+  --r1:#9ccf95; --r1s:#1f3320; --r2:#e0cf5a; --r2s:#3a3414; --r3:#f0a06c; --r3s:#3f2616; --r4:#f08a95; --r4s:#43202a;
+  --good:#9ccf95; --warn:#e8b35a; --bad:#f08a95; --code:#242c38; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#151a22; --paper:#1c222c; --fg:#e8e6df; --muted:#a3abb8; --rule:#333b48;
+  --ink:#9dbbe0; --ink-soft:#243247; --amber:#e8b35a; --amber-soft:#3b2e13;
+  --r1:#9ccf95; --r1s:#1f3320; --r2:#e0cf5a; --r2s:#3a3414; --r3:#f0a06c; --r3s:#3f2616; --r4:#f08a95; --r4s:#43202a;
+  --good:#9ccf95; --warn:#e8b35a; --bad:#f08a95; --code:#242c38; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
+a{color:var(--ink)}
+.wrap{max-width:1100px;margin:0 auto;padding-block:0 72px;padding-inline:16px}
+header.mast{padding-block:28px 20px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;border-bottom:1px solid var(--rule)}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(24px,3.2vw,34px);line-height:1.15;margin:0;text-wrap:balance}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px 24px;font-size:14px;flex:1 1 300px;min-width:0}
+.meta span{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.meta b{font-weight:600}
+.intro{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px 32px;padding-block:20px;border-bottom:1px solid var(--rule)}
+.intro h2{font-family:var(--display);font-size:18px;margin:0 0 8px}
+.intro p,.intro li{font-size:15px;margin:0 0 6px}
+.intro ul{margin:0;padding-left:1.2em}
+.scorebar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--rule);padding-block:10px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.tile{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;min-width:0}
+.tile .lbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .val{font-family:var(--mono);font-size:20px;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
+.tile .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile.total{border-color:var(--ink);background:var(--ink-soft)}
+.tile .val.good{color:var(--good)} .tile .val.warn{color:var(--warn)} .tile .val.bad{color:var(--bad)}
+section.area{margin-top:36px}
+section.area>h2{font-family:var(--display);font-weight:600;font-size:24px;margin:0 0 4px;text-wrap:balance;scroll-margin-top:110px}
+section.area>.sub{font-size:14px;color:var(--muted);margin:0 0 14px}
+.qlist{display:flex;flex-direction:column;gap:10px}
+.q{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:12px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 20px;align-items:start}
+.q.crit{border-left:4px solid var(--r4)}
+.q.open{border-left:4px solid var(--r3)}
+.q .num{font-family:var(--mono);font-size:12px;color:var(--muted);margin-right:8px}
+.q .text{font-size:15.5px;line-height:1.45;margin:0}
+.q .basis{font-size:13px;color:var(--muted);margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.q .ev{font-size:13px;color:var(--muted);margin:4px 0 0}
+.q .ev b{font-weight:600;color:var(--fg)}
+.rk{display:inline-block;font-family:var(--mono);font-size:11.5px;font-weight:600;padding:1px 6px;border-radius:3px;white-space:nowrap;line-height:1.5}
+.rk.R1{color:var(--r1);background:var(--r1s)} .rk.R2{color:var(--r2);background:var(--r2s)} .rk.R3{color:var(--r3);background:var(--r3s)} .rk.R4{color:var(--r4);background:var(--r4s)}
+.v{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--amber);background:var(--amber-soft);padding:0 4px;border-radius:3px}
+.ans{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.ans label{position:relative;cursor:pointer}
+.ans input{position:absolute;opacity:0;width:0;height:0}
+.ans span{display:inline-block;padding:5px 10px;border:1px solid var(--rule);border-radius:3px;font-size:13.5px;line-height:1.2;background:var(--bg);user-select:none}
+.ans input:focus-visible+span{outline:2px solid var(--ink);outline-offset:1px}
+.ans input:checked+span.da{background:var(--r1s);color:var(--r1);border-color:var(--r1);font-weight:600}
+.ans input:checked+span.partial{background:var(--r2s);color:var(--r2);border-color:var(--r2);font-weight:600}
+.ans input:checked+span.nu{background:var(--r4s);color:var(--r4);border-color:var(--r4);font-weight:600}
+.ans input:checked+span.na{background:var(--code);color:var(--muted);border-color:var(--muted);font-weight:600}
+.note{grid-column:1/-1}
+.note input{width:100%;border:1px solid var(--rule);border-radius:3px;background:var(--bg);color:var(--fg);font:inherit;font-size:13.5px;padding:6px 8px}
+.note input:focus{outline:2px solid var(--ink);outline-offset:0;border-color:var(--ink)}
+.results{margin-top:44px;border-top:2px solid var(--ink);padding-top:18px}
+.results h2{font-family:var(--display);font-size:24px;margin:0 0 12px}
+.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:4px;background:var(--paper);margin:12px 0 18px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.grade{font-weight:600}
+.grade.good{color:var(--good)} .grade.warn{color:var(--warn)} .grade.bad{color:var(--bad)}
+.gaps h3{font-family:var(--display);font-size:18px;margin:18px 0 8px}
+.gaps ul{margin:0;padding-left:1.2em}
+.gaps li{margin:4px 0;font-size:14.5px}
+.gaps .empty{color:var(--muted);font-size:14px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;align-items:center}
+button{font:inherit;font-size:14px;padding:8px 14px;border-radius:3px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+button.secondary{background:transparent;color:var(--ink)}
+button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.status{font-size:13px;color:var(--muted)}
+.confirm{display:flex;gap:8px;align-items:center;font-size:14px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted);margin-top:10px;align-items:center}
+.titlebox{position:relative}
+.info{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin-left:10px;vertical-align:middle;position:relative;top:-2px;border-radius:50%;border:0;background:transparent;color:var(--ink);line-height:0;cursor:pointer}
+.info svg{display:block;width:22px;height:22px}
+.info:hover,.info[aria-expanded="true"]{color:var(--amber)}
+.info:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.pop{position:absolute;left:0;top:calc(100% + 10px);z-index:20;width:min(440px,calc(100vw - 32px));background:var(--paper);border:1px solid var(--rule);border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:14px 16px;font-size:14px;line-height:1.5}
+.pop p{margin:0 0 10px}
+.pop p:last-of-type{margin-bottom:12px}
+button.small{font-size:13px;padding:5px 10px}
+footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+@media (max-width:760px){
+  .scorebar{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+  .tile{padding:6px}
+  .tile .val{font-size:16px}
+  .tile .sub{display:none}
+  .q{grid-template-columns:1fr}
+  .ans{justify-content:flex-start}
+  section.area>h2{font-size:21px}
+}
+@media (prefers-reduced-motion:no-preference){ html{scroll-behavior:smooth} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="mast">
+  <div>
+    <p class="eyebrow">Chestionar de autoevaluare</p>
+    <div class="titlebox">
+      <h1>Gradul de aderență la cadrul legal al operațiunilor de personal<button type="button" class="info" id="infoBtn" aria-label="Informații despre chestionar" aria-expanded="false" aria-controls="infoPop"><svg viewBox="0 0 22 22" width="22" height="22" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="6.6" r="1.45" fill="currentColor"/><rect x="9.9" y="9.4" width="2.2" height="7" rx="0.6" fill="currentColor"/></svg></button></h1>
+      <div class="pop" id="infoPop" role="dialog" aria-label="Informații despre chestionar" hidden>
+        <p><b>Ce este.</b> Instrument de autoevaluare internă a conformării cu legislația muncii și fiscală pentru cinci procese: gestiunea CIM, evidența consumului de manoperă, beneficiile salariale, calculul salarial și cadrul de reglementare internă (regulament intern, CCM, fișe de post, politici obligatorii). 85 de cerințe, fiecare cu temei legal, clasă de risc și dovada de verificat.</p>
+        <p><b>Cine și când.</b> Se completează de responsabilul RU și de salarizare, pe bază de documente, și se validează de administrator. Recomandat trimestrial și înaintea unui control ITM. Durată: 3–4 ore cu dovezile la îndemână.</p>
+        <p><b>Punctaj.</b> Ponderea cerinței este clasa de risc (R4 = 4 … R1 = 1). Da = 1, Parțial = 0,5, Nu = 0, N.A. exclus. Gradul de aderență = punctaj obținut / punctaj maxim aplicabil. Orice cerință R4 cu Nu sau Parțial este neconformitate critică, indiferent de procent.</p>
+        <p><b>Confidențialitate.</b> Răspunsurile rămân în browserul celui care completează; nu se transmit nicăieri. Raportul se copiază cu butonul de la finalul paginii.</p>
+        <p><b>Document corelat.</b> <a href="https://claude.ai/artifact/3gh9Via2hThfZgccaht89F">Procedura PCL-CIM-01</a> (metodologia de risc și materialitate, termene, sancțiuni). Referințele marcate [V] se reconfirmă pe legislatie.just.ro.</p>
+        <button type="button" class="secondary small" id="infoClose">Închide</button>
+      </div>
+    </div>
+  </div>
+  <div class="meta">
+    <div><span>Cod</span><b>CAE-RM-01</b></div>
+    <div><span>Versiune</span><b>1.0</b></div>
+    <div><span>Cadru legal verificat</span><b>13 octombrie 2026</b></div>
+    <div><span>Document corelat</span><b>PCL-CIM-01</b></div>
+  </div>
+</header>
+
+<div class="intro">
+  <div>
+    <h2>Cum se completează</h2>
+    <ul>
+      <li><b>Da</b>: conform și dovedit cu documentul din rubrica „Dovadă”.</li>
+      <li><b>Parțial</b>: conform pentru o parte din cazuri sau fără dovadă completă.</li>
+      <li><b>Nu</b>: neconform.</li>
+      <li><b>N.A.</b>: obligația nu se aplică (se motivează în observații); nu intră în calcul.</li>
+    </ul>
+    <p style="margin-top:8px">Răspunsurile se salvează doar în acest browser. Raportul se copiază cu butonul de la final.</p>
+  </div>
+  <div>
+    <h2>Cum se calculează</h2>
+    <p>Fiecare întrebare are ponderea clasei de risc (R4 = 4, R3 = 3, R2 = 2, R1 = 1). Da = 1, Parțial = 0,5, Nu = 0. Gradul de aderență = punctaj obținut / punctaj maxim aplicabil.</p>
+    <p><b>Regula de materialitate:</b> orice întrebare R4 cu răspuns Nu sau Parțial este neconformitate critică (prioritate 1), indiferent de procent. R3 cu Nu = prioritate 2.</p>
+    <div class="legend">
+      <span><span class="rk R4">R4</span> penal / sistare</span>
+      <span><span class="rk R3">R3</span> major</span>
+      <span><span class="rk R2">R2</span> moderat</span>
+      <span><span class="rk R1">R1</span> minor</span>
+      <span><span class="v">[V]</span> de reconfirmat pe legislatie.just.ro</span>
+    </div>
+  </div>
+</div>
+
+<div class="scorebar" id="scorebar" aria-live="polite"></div>
+
+<div id="areas"></div>
+
+<section class="results" id="results">
+  <h2>Rezultate</h2>
+  <div class="tw"><table id="restable">
+    <thead><tr><th>Domeniu</th><th>Răspunsuri</th><th>Punctaj</th><th>Aderență</th><th>Interpretare</th><th>Critice (R4)</th><th>Prioritate 2 (R3 = Nu)</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <div class="gaps" id="gaps"></div>
+  <div class="actions">
+    <button type="button" id="copyBtn">Copiază raportul</button>
+    <button type="button" class="secondary" id="resetBtn">Resetează răspunsurile</button>
+    <span class="confirm" id="confirmBox" hidden>Sigur? <button type="button" id="resetYes">Da, șterge</button> <button type="button" class="secondary" id="resetNo">Nu</button></span>
+    <span class="status" id="status"></span>
+  </div>
+  <textarea id="reportText" aria-label="Raport" hidden></textarea>
+</section>
+
+<footer>Instrument de autoevaluare internă corelat cu procedura PCL-CIM-01. Nu înlocuiește consultanța juridică. Sursa versionată: depozitul OperatiuneManopera, fișierul docs/Chestionar-autoevaluare-aderenta-legala.md.</footer>
+</div>
+
+<script>
+(function(){
+  var DATA = [{"id": "A", "title": "Gestionarea contractelor individuale de muncă", "short": "Gestiune CIM", "q": [{"t": "Toate persoanele care prestează activitate au CIM în formă scrisă, în limba română, semnat de ambele părți cel târziu în ziua anterioară începerii activității.", "b": "Art. 16 alin. (1) CM; art. 260 alin. (1) lit. e); art. 264 alin. (4) CM", "c": 4, "e": "Registrul intern de contracte; CIM datate și semnate"}, {"t": "Fiecare CIM este transmis în REGES-ONLINE cel târziu în ziua anterioară începerii activității, iar recipisa este arhivată la dosar.", "b": "Art. 16 alin. (2) CM; HG 295/2025 art. 4", "c": 4, "e": "Recipise REGES; raport „salariați activi” la zi"}, {"t": "Informarea prealabilă acoperă toate elementele art. 17 alin. (3) lit. a)–q), iar CIM urmează modelul-cadru publicat de Inspecția Muncii.", "b": "Art. 17 CM (Legea 283/2022)", "c": 2, "e": "Șablon CIM în uz; comparație cu modelul ITM"}, {"t": "Fișa de aptitudine (examen medical la angajare) este obținută înainte de semnarea CIM; examenele periodice și cele de reluare sunt la zi.", "b": "Art. 27 CM; HG 355/2007", "c": 4, "e": "Fișe de aptitudine; planificarea examenelor periodice"}, {"t": "Salariatul primește un exemplar original al CIM sub semnătură de primire, anterior începerii activității.", "b": "Art. 16 alin. (3) CM; art. 260 alin. (1) lit. p)", "c": 2, "e": "Mențiune de primire pe exemplarul angajatorului"}, {"t": "La fiecare punct de lucru / șantier există copia CIM (fizic sau electronic) pentru salariații care prestează activitate acolo.", "b": "Art. 16 alin. (4) și art. 16¹ CM; art. 260 alin. (1) lit. q)", "c": 3, "e": "Dosar de șantier; verificare prin sondaj"}, {"t": "Perioadele de probă, contractele pe durată determinată (max. 36 luni, max. 3 succesive, cazuri art. 83) și contractele cu timp parțial (clauze art. 105) respectă limitele legale.", "b": "Art. 31–33, 82–87, 105 CM", "c": 3, "e": "Lista CDD cu durate; CIM part-time cu program"}, {"t": "Orice modificare a elementelor CIM (funcție, salariu, durată, loc, timp de muncă) se face prin act adițional semnat anterior modificării și se transmite în REGES în termen (ziua anterioară; 20 zile lucrătoare pentru salariu).", "b": "Art. 17 alin. (5), art. 41 CM; HG 295/2025 art. 4, 9", "c": 3, "e": "Acte adiționale; jurnal REGES"}, {"t": "Suspendările (concedii medicale, creștere copil, fără plată, absențe nemotivate) se transmit în REGES în termenele legale, cu document justificativ la dosar.", "b": "Art. 49–54 CM; HG 295/2025 art. 4", "c": 2, "e": "Jurnal REGES suspendări; certificate medicale"}, {"t": "Niciun salariat cu CIM suspendat nu prestează activitate.", "b": "Art. 15¹ lit. c), art. 260 alin. (1) lit. e²) CM", "c": 4, "e": "Încrucișare pontaj – suspendări REGES"}, {"t": "Concedierile respectă interdicțiile art. 60, cercetarea disciplinară sau evaluarea prealabilă, termenele, preavizul de minimum 20 zile lucrătoare și conținutul obligatoriu al deciziei; fiecare concediere are aviz juridic scris.", "b": "Art. 58–80, 251–252 CM", "c": 3, "e": "Dosare de concediere; avize juridice"}, {"t": "Încetările se transmit în REGES în termen, cu temeiul exact; adeverința de vechime și extrasul REGES se eliberează la încetare sau în 15 zile lucrătoare de la cerere.", "b": "HG 295/2025 art. 4, 8; art. 34 alin. (5) CM", "c": 2, "e": "Jurnal REGES încetări; registru adeverințe"}, {"t": "Dosarul personal al fiecărui salariat este complet (opis cu conținutul minim) și disponibil la sediu sau la punctul de lucru.", "b": "HG 295/2025 art. 8–9", "c": 2, "e": "Sondaj pe dosare"}, {"t": "Prelucrarea datelor din dosarul personal respectă GDPR: informare la angajare, minimizare, acces restricționat, termene de păstrare, registru de prelucrări.", "b": "Regulamentul (UE) 2016/679 art. 5, 13, 30, 32; Legea 190/2018", "c": 3, "e": "Informări semnate; politica de retenție"}, {"t": "Vârsta minimă (16 ani; 15 cu acordul părinților) și dreptul de muncă al cetățenilor non-UE sunt verificate documentar înainte de angajare.", "b": "Art. 13, 265 CM; OG 25/2014", "c": 4, "e": "Copii acte de identitate; avize/permise de muncă"}, {"t": "La controlul ITM accesul este permis imediat, iar documentele se prezintă la prima solicitare; există persoană desemnată și instruită.", "b": "Art. 254, 264 alin. (2)–(3) CM", "c": 4, "e": "Procedura de control; desemnare scrisă"}]}, {"id": "B", "title": "Evidența consumului de manoperă (timp de muncă)", "short": "Consum manoperă", "q": [{"t": "Există evidență zilnică a orelor de muncă pentru fiecare salariat, cu ora de începere și ora de sfârșit, validată de șeful direct.", "b": "Art. 119 alin. (1) CM; art. 260 alin. (1) lit. m)", "c": 2, "e": "Foi colective de prezență / sistem de pontaj"}, {"t": "Pentru salariații mobili, la domiciliu sau în telemuncă, modalitatea de evidență a orelor este stabilită în CIM și aplicată efectiv.", "b": "Art. 119 alin. (2) CM; art. 5 alin. (2) Legea 81/2018", "c": 2, "e": "Clauze CIM; rapoarte de activitate"}, {"t": "Pontajul este reconciliat lunar cu statul de plată, cu REGES (salariați activi) și cu orele alocate pe lucrări / centre de cost.", "b": "Art. 119, 168 CM; art. 25 Cod fiscal (justificarea cheltuielilor)", "c": 3, "e": "Fișă de reconciliere lunară semnată"}, {"t": "Durata muncii respectă 8 ore/zi și 40 ore/săptămână; maximum 48 ore/săptămână inclusiv orele suplimentare, în medie pe o perioadă de referință de 4 luni.", "b": "Art. 112, 114 CM", "c": 3, "e": "Rapoarte de ore pe salariat și săptămână"}, {"t": "Orele suplimentare se prestează numai cu acordul salariatului, sunt evidențiate distinct și se compensează cu timp liber în 90 zile sau cu spor de minimum 75 %.", "b": "Art. 120–123 CM; art. 260 alin. (1) lit. i)", "c": 3, "e": "Acorduri scrise; state de plată cu spor"}, {"t": "Repausul zilnic de 12 ore consecutive, repausul săptămânal de 48 ore consecutive și pauza de masă (program peste 6 ore) sunt respectate și vizibile în pontaj.", "b": "Art. 134, 135, 137 CM; art. 260 alin. (1) lit. j)", "c": 2, "e": "Pontaj; planificarea schimburilor"}, {"t": "Munca de noapte este evidențiată distinct; salariații de noapte beneficiază de program redus sau spor de 25 % și de examen medical gratuit periodic.", "b": "Art. 125–128 CM; art. 260 alin. (1) lit. l)", "c": 2, "e": "Pontaj noapte; fișe medicale"}, {"t": "Munca în zilele de sărbătoare legală se compensează cu timp liber în 30 zile sau cu spor de 100 %; zilele libere legale sunt acordate.", "b": "Art. 139–142 CM; art. 260 alin. (1) lit. g)", "c": 2, "e": "Pontaj; state de plată"}, {"t": "Programele de lucru inegale, individualizate sau în schimburi sunt prevăzute în regulamentul intern / CIM și afișate la locul de muncă.", "b": "Art. 113, 116–118 CM", "c": 1, "e": "Regulament intern; grafic afișat"}, {"t": "Salariații cu timp parțial prestează activitate exclusiv în programul din CIM și nu efectuează ore suplimentare.", "b": "Art. 105–106, art. 15¹ lit. d), art. 260 alin. (1) lit. e³) CM", "c": 3, "e": "Încrucișare pontaj – program CIM"}, {"t": "Tinerii sub 18 ani lucrează maximum 6 ore/zi și 30 ore/săptămână, fără ore suplimentare și fără muncă de noapte.", "b": "Art. 112 alin. (2), 124, 128 alin. (2), 265 CM", "c": 4, "e": "Lista salariaților minori; pontaj"}, {"t": "Zilierii sunt folosiți numai în domeniile permise de Legea 52/2011 (construcțiile nu sunt permise), în limitele de durată legale, cu registrul electronic de evidență transmis.", "b": "Legea 52/2011 art. 4, 13 [V]", "c": 3, "e": "Registrul electronic al zilierilor"}, {"t": "Personalul pus la dispoziție de agenți de muncă temporară sau al subcontractorilor de pe șantier este identificat; există contract de punere la dispoziție, iar orele acestora sunt evidențiate separat.", "b": "Art. 88–102 CM; HG 1256/2011", "c": 2, "e": "Contracte de punere la dispoziție; liste de acces șantier"}, {"t": "Pentru lucrătorii detașați transnațional pe șantiere, beneficiarul verifică plata salariului minim de către subcontractantul direct (răspundere solidară în construcții).", "b": "Legea 16/2017 art. 14–15 [V]", "c": 3, "e": "Declarații / dovezi de plată de la subcontractant"}, {"t": "Concediile (odihnă, medical, fără plată, evenimente familiale) sunt reflectate în pontaj cu documentele justificative.", "b": "Art. 144–158 CM", "c": 1, "e": "Cereri de concediu; certificate"}, {"t": "Foile de pontaj și situațiile de consum manoperă pe lucrări sunt păstrate 5 ani ca documente justificative.", "b": "Art. 25 Legea 82/1991 (Legea 36/2023)", "c": 1, "e": "Arhivă fizică / electronică"}, {"t": "Evidența orelor este accesibilă la punctul de lucru pentru controlul inspectorilor de muncă.", "b": "Art. 119 alin. (1) CM teza finală", "c": 2, "e": "Acces la sistemul de pontaj de pe șantier"}]}, {"id": "C", "title": "Gestionarea beneficiilor salariale", "short": "Beneficii", "q": [{"t": "Beneficiile sunt definite în CCM / regulamentul intern / CIM pe criterii obiective și nediscriminatorii și sunt comunicate salariaților conform art. 17 alin. (3) lit. q).", "b": "Art. 5, 17, 159 CM; OG 137/2000", "c": 2, "e": "Politica de beneficii; acte adiționale"}, {"t": "Tichetele de masă se acordă pe suport electronic, maximum un tichet pe zi lucrată efectiv (nu în concediu, concediu medical sau delegare cu diurnă), în limita valorii nominale maxime în vigoare.", "b": "Legea 165/2018 art. 10–11; HG 1045/2018 [V valoare]", "c": 2, "e": "Comenzi lunare vs. pontaj"}, {"t": "Tichetele de masă și voucherele de vacanță sunt impozitate (10 %) și supuse CASS (10 %), fără CAS, și sunt declarate corect în D112.", "b": "Cod fiscal art. 76 alin. (3), art. 157 (Legea 296/2023) [V]", "c": 3, "e": "State de plată; D112"}, {"t": "Tichetele cadou neimpozabile se acordă numai cu ocaziile legale (Paște, Crăciun, 8 Martie, 1 Iunie), maximum 300 lei/persoană/eveniment; depășirile sunt impozitate integral.", "b": "Cod fiscal art. 76 alin. (4) lit. a)", "c": 2, "e": "Liste de distribuire; state de plată"}, {"t": "Beneficiile din plafonul lunar de 33 % din salariul de bază (telemuncă, servicii turistice, pensie facultativă, asigurări medicale, hrană, chirie, educație timpurie) sunt urmărite per salariat, iar depășirea este impozitată.", "b": "Cod fiscal art. 76 alin. (4¹) [V]", "c": 3, "e": "Fișă de urmărire a plafonului per salariat"}, {"t": "Indemnizațiile de delegare / detașare respectă plafonul neimpozabil (2,5 × nivelul legal; maximum 3 salarii de bază raportat la zile) și sunt justificate cu ordine de deplasare.", "b": "Cod fiscal art. 76 alin. (2) lit. k), alin. (4) lit. h) [V]", "c": 3, "e": "Ordine de deplasare; deconturi"}, {"t": "Avantajele în natură (autoturism în uz mixt, locuință, telefon, cazare) sunt evaluate și impozitate conform regulilor fiscale.", "b": "Cod fiscal art. 76 alin. (3) și (4)", "c": 2, "e": "Evidența avantajelor; state de plată"}, {"t": "Ajutoarele sociale (naștere, deces, boală gravă) sunt prevăzute în CCM / regulamentul intern și acordate neimpozabil în condițiile legii.", "b": "Cod fiscal art. 76 alin. (4) lit. a)", "c": 1, "e": "Regulament intern; documente justificative"}, {"t": "Contribuțiile la pensia facultativă și asigurările voluntare de sănătate plătite de angajator se încadrează în 400 EUR/an fiecare și în plafonul de 33 %.", "b": "Cod fiscal art. 76 alin. (4¹) [V]", "c": 2, "e": "Contracte; fișă plafon"}, {"t": "Beneficiile sunt acordate pro rata salariaților cu timp parțial și fără diferențiere între contractele pe durată determinată și cele pe durată nedeterminată.", "b": "Art. 87, 106 CM", "c": 2, "e": "Politica de beneficii"}, {"t": "Beneficiile contractuale sunt plătite la termen, nu sunt retrase unilateral și sunt lichidate la încetare.", "b": "Art. 41, 166 CM", "c": 2, "e": "State de plată; note de lichidare"}, {"t": "Nu se acordă beneficii în numerar sau bunuri neevidențiate în statele de plată și în D112 (muncă subdeclarată).", "b": "Art. 15² CM; art. 260 alin. (1) lit. e⁴); Legea 241/2005 art. 9", "c": 4, "e": "Reconciliere casă / bancă – state"}, {"t": "Transparența salarială: s-a verificat stadiul transpunerii Directivei (UE) 2023/970 (termen 7 iunie 2026) și sunt pregătite: intervalul salarial în anunțuri, interdicția întrebărilor despre istoricul salarial, dreptul la informare, raportarea pentru angajatorii cu cel puțin 100 salariați.", "b": "Directiva (UE) 2023/970; Legea 202/2002 [V]", "c": 2, "e": "Anunțuri de angajare; procedura de informare"}, {"t": "Furnizorii de bilete de valoare sunt autorizați, iar contractele prevăd evidența nominală a beneficiarilor.", "b": "Legea 165/2018 art. 5–6; HG 1045/2018", "c": 1, "e": "Contracte furnizori"}, {"t": "Beneficiile sunt reconciliate lunar cu facturile furnizorilor, cu statele de plată și cu D112.", "b": "Control intern; art. 25 Cod fiscal", "c": 1, "e": "Fișă de reconciliere"}]}, {"id": "D", "title": "Calculul salarial", "short": "Calcul salarial", "q": [{"t": "Niciun salariat cu normă întreagă nu are salariul de bază sub minimul aplicabil (4.050 lei până la 30.06.2026; 4.325 lei de la 01.07.2026; 4.582 lei în construcții); la timp parțial, proporțional.", "b": "Art. 164 CM; HG 146/2026; OUG 93/2023 [V construcții]; art. 264 alin. (1) CM", "c": 4, "e": "Raport salarii de bază vs. minim"}, {"t": "Niciun salariat nu este menținut la salariul minim mai mult de 24 luni de la încheierea CIM.", "b": "Art. 164 CM (OUG 142/2021) [V]", "c": 2, "e": "Raport vechime la salariul minim"}, {"t": "Suma neimpozabilă și neinclusă în baza contribuțiilor pentru salariul minim (300 lei; 200 lei de la 01.07.2026) este aplicată numai salariaților eligibili.", "b": "OUG 156/2024; HG 146/2026 [V]", "c": 2, "e": "Parametrizare software salarizare"}, {"t": "Cotele CAS 25 %, CASS 10 %, impozit 10 %, CAM 2,25 % (și cotele majorate CAS pentru condiții deosebite / speciale) sunt aplicate corect; facilitățile fiscale eliminate din 2025 (construcții, IT, agricultură) nu mai sunt aplicate.", "b": "Cod fiscal art. 64, 138, 156, 220³; OUG 156/2024", "c": 3, "e": "Parametrizare; D112"}, {"t": "Pentru salariații cu timp parțial, CAS și CASS se datorează cel puțin la nivelul salariului minim, cu excepțiile legale documentate (elevi, studenți, pensionari, cumul de funcții).", "b": "Cod fiscal art. 146 alin. (5¹)–(5⁶) [V]", "c": 3, "e": "Declarații salariați; calcul"}, {"t": "Deducerea personală de bază și cea suplimentară (copii în învățământ, tineri până la 26 ani) se acordă pe baza declarațiilor și documentelor, actualizate la fiecare schimbare.", "b": "Cod fiscal art. 77", "c": 2, "e": "Declarații persoane în întreținere; adeverințe școlare"}, {"t": "Sporurile legale sunt calculate corect: ore suplimentare minimum 75 %, noapte minimum 25 %, sărbători legale 100 %, condiții deosebite conform CCM.", "b": "Art. 123, 126, 142 CM", "c": 3, "e": "State de plată; pontaj"}, {"t": "Indemnizația de concediu de odihnă este media zilnică a drepturilor salariale din ultimele 3 luni înmulțită cu zilele de concediu și se plătește cu cel puțin 5 zile lucrătoare înainte de plecare.", "b": "Art. 150 CM", "c": 2, "e": "Calcul indemnizație; date de plată"}, {"t": "Indemnizațiile de concediu medical sunt calculate conform OUG 158/2005 (baza: ultimele 6 luni; procentele în vigoare; primele 5 zile suportate de angajator) și recuperate din FNUASS în termen.", "b": "OUG 158/2005 art. 10–17 [V procente 2025]", "c": 2, "e": "Calcul CM; cereri de recuperare"}, {"t": "Reținerile din salariu au titlu legal și respectă limitele: maximum 1/2 din salariul net cumulat; popriri 1/3 sau 1/2 conform Codului de procedură civilă.", "b": "Art. 169 CM; art. 729 C. proc. civ.", "c": 2, "e": "Evidența popririlor"}, {"t": "Salariul se plătește lunar la data stabilită, plata este dovedită (stat semnat sau extras bancar) și nu există întârzieri de peste o lună.", "b": "Art. 166, 168 CM; art. 260 alin. (1) (5.000–10.000 lei/salariat) [V]", "c": 3, "e": "Extrase bancare; state semnate"}, {"t": "D112 se depune până la data de 25 a lunii următoare, iar impozitul și contribuțiile reținute se virează la termen; nicio restanță nu depășește 60 zile de la scadență.", "b": "Cod fiscal art. 147; Legea 241/2005 art. 6¹", "c": 4, "e": "Recipise D112; fișa pe plătitor ANAF"}, {"t": "Statul de plată, D112, plățile bancare și pontajul sunt reconciliate lunar și documentat; nu există plăți salariale în afara statelor.", "b": "Art. 15² CM; Legea 241/2005 art. 9", "c": 4, "e": "Fișă de reconciliere semnată"}, {"t": "Atribuțiile sunt separate: calculul, verificarea și aprobarea plății sunt făcute de persoane diferite; modificările datelor master (salariu, IBAN, persoane în întreținere) sunt aprobate și jurnalizate.", "b": "Control intern; art. 10 Legea 82/1991", "c": 2, "e": "Matrice de responsabilități; jurnal modificări"}, {"t": "La încetare, lichidarea include salariul la zi, compensarea concediului neefectuat și reținerile legale și este plătită la termenul de plată a salariului.", "b": "Art. 146 alin. (3), 166 CM", "c": 2, "e": "Note de lichidare"}, {"t": "Indemnizația de 75 % din salariul de bază este plătită pe durata întreruperii temporare a activității.", "b": "Art. 53 CM; art. 260 alin. (1) lit. k)", "c": 2, "e": "Decizii de întrerupere; state"}, {"t": "Statele de salarii și documentele justificative sunt arhivate 5 ani; furnizorul extern de salarizare are contract de prelucrare a datelor.", "b": "Art. 25 Legea 82/1991; GDPR art. 28", "c": 2, "e": "Arhivă; contract procesator"}, {"t": "Erorile de calcul sunt corectate prin regularizare documentată, sumele plătite necuvenit se recuperează conform art. 256 CM, iar D112 rectificativă este depusă.", "b": "Art. 256 CM; Cod de procedură fiscală art. 105", "c": 1, "e": "Note de regularizare; D112 rectificative"}, {"t": "Contractul colectiv de muncă aplicabil (unitate sau sector, dacă este extins prin ordin) este identificat, iar drepturile salariale minime din acesta sunt respectate.", "b": "Legea 367/2022 [V]", "c": 2, "e": "CCM înregistrat; grilă salarială"}]}, {"id": "E", "title": "Cadrul de reglementare internă", "short": "Reglementări interne", "q": [{"t": "Regulamentul intern există și cuprinde conținutul minim obligatoriu: reguli SSM, respectarea nediscriminării și a demnității, drepturile și obligațiile părților, procedura de soluționare a cererilor și reclamațiilor, regulile de disciplină, abaterile și sancțiunile, procedura disciplinară, criteriile și procedurile de evaluare profesională, regulile privind hărțuirea.", "b": "Art. 241–242 CM; HG 970/2023 (metodologia privind hărțuirea)", "c": 2, "e": "Regulamentul intern în vigoare, cu dată și semnătură"}, {"t": "Regulamentul intern a fost consultat cu sindicatul sau reprezentanții salariaților, este adus la cunoștința fiecărui salariat (la angajare, sub semnătură) și afișat; modificările sunt comunicate în aceleași condiții.", "b": "Art. 241, 243 CM", "c": 2, "e": "Tabel de luare la cunoștință; dovada afișării"}, {"t": "La angajatorii cu cel puțin 10 salariați, negocierea colectivă este inițiată obligatoriu (cu cel puțin 45 zile înainte de expirarea CCM), procesul-verbal al negocierii este încheiat, iar CCM încheiat este înregistrat la ITM; durata CCM este între 12 și 24 luni.", "b": "Legea 367/2022 art. 97, 100, 106, 110 [V]", "c": 3, "e": "Convocări, procese-verbale, CCM înregistrat"}, {"t": "CCM aplicabil (unitate sau sector, dacă este extins prin ordin) este identificat, iar clauzele sale (sporuri, concedii suplimentare, beneficii, timp de muncă) sunt reflectate în CIM, regulamentul intern și statele de plată; niciun CIM nu conține drepturi sub nivelul CCM.", "b": "Art. 11, 132 CM; Legea 367/2022 art. 102, 108 [V]", "c": 3, "e": "Comparație CCM – CIM – state"}, {"t": "Fiecare funcție are fișă de post conformă COR, cu atribuții, criterii de evaluare, cerințe SSM, relații ierarhice; fișele sunt semnate, anexate la CIM și actualizate la fiecare modificare a felului muncii.", "b": "Art. 17 alin. (3) lit. d)–e), art. 41 CM", "c": 2, "e": "Fișe de post semnate; opis dosare"}, {"t": "Organigrama, statul de funcții și regulamentul de organizare și funcționare sunt aprobate de reprezentantul legal, datate și arhivate la fiecare modificare; ele susțin cauza reală și serioasă a concedierilor pentru desființarea postului.", "b": "Art. 40 alin. (1) lit. a), art. 65 CM", "c": 2, "e": "Organigrame succesive aprobate"}, {"t": "Criteriile și procedura de evaluare profesională sunt stabilite în regulamentul intern sau CCM, comunicate la angajare, aplicate periodic, cu rezultate scrise comunicate salariatului.", "b": "Art. 17 alin. (3) lit. e), art. 63 alin. (2), art. 242 lit. i) CM", "c": 2, "e": "Fișe de evaluare semnate"}, {"t": "Procedura disciplinară internă este formalizată conform legii (convocare scrisă, comisie, dreptul la apărare și asistență, termene de 30 zile / 6 luni, conținutul deciziei) și există evidența sancțiunilor cu radierea lor după 12 luni.", "b": "Art. 247–252 CM", "c": 2, "e": "Procedura în regulamentul intern; registrul sancțiunilor"}, {"t": "Politica de prevenire și combatere a hărțuirii (pe criteriul de sex și morale) este adoptată, cu procedură de sesizare, persoană responsabilă, instruire și evidența sesizărilor.", "b": "Legea 202/2002 art. 2; OG 137/2000 art. 2 alin. (5¹)–(5⁷) (Legea 167/2020); HG 970/2023 [V sancțiuni]", "c": 3, "e": "Politica aprobată; registrul sesizărilor; dovezi instruire"}, {"t": "La angajatorii cu cel puțin 50 salariați există canalul intern de raportare a avertizărilor de integritate, persoana desemnată, registrul raportărilor și procedura de protecție a avertizorului.", "b": "Legea 361/2022 art. 6, 9–10 [V]", "c": 2, "e": "Procedura aprobată; desemnare; registru"}, {"t": "Politica internă de protecție a datelor este adoptată: registrul prelucrărilor, informările pentru salariați, procedura de răspuns la cereri, iar monitorizarea salariaților (video, e-mail, acces) este reglementată în regulamentul intern cu informare prealabilă și consultarea reprezentanților.", "b": "GDPR art. 13, 30, 32; Legea 190/2018 art. 5", "c": 3, "e": "Politica GDPR; clauzele de monitorizare din RI"}, {"t": "Instrucțiunile proprii SSM, planul de prevenire și protecție și evaluarea riscurilor sunt aprobate prin decizie; comitetul SSM este constituit la angajatorii cu cel puțin 50 salariați.", "b": "Legea 319/2006 art. 13 lit. b), e); HG 1425/2006 art. 57 [V]", "c": 3, "e": "Decizii; plan de prevenire; procese-verbale comitet"}, {"t": "La angajatorii cu cel puțin 20 salariați există planul anual de formare profesională, consultat cu sindicatul sau reprezentanții salariaților și anexat la CCM; participarea la formare este asigurată cel puțin o dată la 2 ani (sau 3 ani sub 21 salariați) și evidențiată.", "b": "Art. 194–195 CM", "c": 1, "e": "Plan de formare; evidența participării"}, {"t": "Reprezentanții salariaților sunt aleși (angajatori cu peste 20 salariați, fără sindicat) sau sindicatul este recunoscut, iar consultările obligatorii (regulament intern, CCM, concedieri colective, plan de formare, monitorizare) sunt documentate.", "b": "Art. 221–226 CM; Legea 367/2022", "c": 2, "e": "Proces-verbal de alegere; convocări și minute de consultare"}, {"t": "Politicile privind telemunca, programul flexibil sau individualizat și utilizarea echipamentelor IT sunt formalizate în regulamentul intern sau CIM, dacă se aplică.", "b": "Legea 81/2018; art. 118 CM", "c": 1, "e": "Politica / clauzele aplicabile"}, {"t": "Nomenclatorul arhivistic este întocmit și aprobat, iar politica de retenție este corelată cu termenele legale (5 ani state de salarii, dosare personale, REGES, documente SSM).", "b": "Legea 16/1996 art. 8; art. 25 Legea 82/1991", "c": 1, "e": "Nomenclator aprobat; politica de retenție"}, {"t": "Deciziile interne (numire, delegare de competențe, persoane desemnate pentru REGES și pentru controlul ITM, comisii) sunt numerotate, datate, semnate de reprezentantul legal și ținute într-un registru.", "b": "Art. 40 CM; HG 295/2025 art. 2 [V]", "c": 1, "e": "Registrul deciziilor"}, {"t": "Codul de conduită, regulile privind conflictul de interese, confidențialitatea și clauzele de neconcurență sunt coerente cu CIM și cu limitele legale.", "b": "Art. 21–26 CM", "c": 1, "e": "Codul de conduită; clauze CIM"}]}];
+  var W = {1:1,2:2,3:3,4:4};
+  var VAL = {da:1, partial:0.5, nu:0};
+  var KEY = "cae-rm-01-v1";
+  var state = {};
+  try { var s = localStorage.getItem(KEY); if (s) state = JSON.parse(s) || {}; } catch(e) { state = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {} }
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function basisHtml(b){ return esc(b).replace(/\[V[^\]]*\]/g, function(m){ return '<span class="v">'+m+'</span>'; }); }
+
+  // render
+  var areasEl = document.getElementById("areas");
+  var h = [];
+  DATA.forEach(function(a){
+    h.push('<section class="area" id="area-'+a.id+'"><h2>'+a.id+'. '+esc(a.title)+'</h2><p class="sub">'+a.q.length+' cerințe</p><div class="qlist">');
+    a.q.forEach(function(q,i){
+      var id = a.id+(i+1);
+      h.push('<div class="q" id="q-'+id+'" data-id="'+id+'" data-c="'+q.c+'">');
+      h.push('<div><p class="text"><span class="num">'+id+'</span>'+esc(q.t)+'</p>');
+      h.push('<p class="basis"><span class="rk R'+q.c+'">R'+q.c+'</span><span>'+basisHtml(q.b)+'</span></p>');
+      h.push('<p class="ev"><b>Dovadă:</b> '+esc(q.e)+'</p></div>');
+      h.push('<div class="ans" role="radiogroup" aria-label="Răspuns '+id+'">');
+      [["da","Da"],["partial","Parțial"],["nu","Nu"],["na","N.A."]].forEach(function(o){
+        var chk = state[id] && state[id].a === o[0] ? " checked" : "";
+        h.push('<label><input type="radio" name="a-'+id+'" id="a-'+id+'-'+o[0]+'" value="'+o[0]+'"'+chk+'><span class="'+o[0]+'">'+o[1]+'</span></label>');
+      });
+      h.push('</div>');
+      var note = state[id] && state[id].n ? state[id].n : "";
+      h.push('<div class="note"><input type="text" id="n-'+id+'" placeholder="Observații / dovada verificată / motivare N.A." value="'+esc(note)+'" maxlength="300"></div>');
+      h.push('</div>');
+    });
+    h.push('</div></section>');
+  });
+  areasEl.innerHTML = h.join("");
+
+  areasEl.addEventListener("change", function(ev){
+    var t = ev.target;
+    if (t.type === "radio") { var id = t.name.slice(2); state[id] = state[id] || {}; state[id].a = t.value; save(); compute(); }
+  });
+  areasEl.addEventListener("input", function(ev){
+    var t = ev.target;
+    if (t.type === "text") { var id = t.id.slice(2); state[id] = state[id] || {}; state[id].n = t.value; save(); }
+  });
+
+  function grade(p){
+    if (p === null) return {t:"—", c:""};
+    if (p >= 90) return {t:"Aderență ridicată", c:"good"};
+    if (p >= 75) return {t:"Aderență bună, deficiențe de remediat", c:"warn"};
+    if (p >= 50) return {t:"Aderență parțială", c:"warn"};
+    return {t:"Aderență scăzută", c:"bad"};
+  }
+  function fmt(p){ return p === null ? "—" : p.toFixed(0).replace(".", ",") + " %"; }
+
+  var last = null;
+  function compute(){
+    var rows = [], tot = {got:0,max:0,ans:0,n:0,crit:0,p2:0}, gaps = {1:[],2:[],3:[]};
+    DATA.forEach(function(a){
+      var got=0,max=0,ans=0,crit=0,p2=0;
+      a.q.forEach(function(q,i){
+        var id = a.id+(i+1), st = state[id], el = document.getElementById("q-"+id);
+        el.classList.remove("crit","open");
+        if (!st || !st.a) return;
+        ans++;
+        if (st.a === "na") return;
+        max += W[q.c]; got += W[q.c]*VAL[st.a];
+        if (q.c === 4 && st.a !== "da") { crit++; el.classList.add("crit"); gaps[1].push({id:id,q:q,a:st.a}); }
+        else if (q.c === 3 && st.a === "nu") { p2++; el.classList.add("open"); gaps[2].push({id:id,q:q,a:st.a}); }
+        else if (st.a !== "da") { el.classList.add("open"); gaps[3].push({id:id,q:q,a:st.a}); }
+      });
+      var p = max ? got/max*100 : null;
+      rows.push({a:a,got:got,max:max,ans:ans,p:p,crit:crit,p2:p2});
+      tot.got+=got; tot.max+=max; tot.ans+=ans; tot.n+=a.q.length; tot.crit+=crit; tot.p2+=p2;
+    });
+    var tp = tot.max ? tot.got/tot.max*100 : null;
+    last = {rows:rows,tot:tot,tp:tp,gaps:gaps};
+
+    // score strip
+    var sb = [];
+    rows.forEach(function(r){ var g = grade(r.p); sb.push('<div class="tile"><div class="lbl">'+r.a.id+' · '+esc(r.a.short)+'</div><div class="val '+g.c+'">'+fmt(r.p)+'</div><div class="sub">'+r.ans+'/'+r.a.q.length+' răspunsuri'+(r.crit?' · '+r.crit+' critice':'')+'</div></div>'); });
+    var tg = grade(tp);
+    sb.push('<div class="tile total"><div class="lbl">Total</div><div class="val '+tg.c+'">'+fmt(tp)+'</div><div class="sub">'+tot.ans+'/'+tot.n+' răspunsuri'+(tot.crit?' · '+tot.crit+' critice':'')+'</div></div>');
+    document.getElementById("scorebar").innerHTML = sb.join("");
+
+    // table
+    var tb = [];
+    rows.forEach(function(r){ var g = grade(r.p); tb.push('<tr><td>'+r.a.id+'. '+esc(r.a.title)+'</td><td class="n">'+r.ans+' / '+r.a.q.length+'</td><td class="n">'+r.got.toFixed(1).replace(".",",")+' / '+r.max+'</td><td class="n grade '+g.c+'">'+fmt(r.p)+'</td><td class="grade '+g.c+'">'+g.t+'</td><td class="n">'+r.crit+'</td><td class="n">'+r.p2+'</td></tr>'); });
+    tb.push('<tr><td><b>Total</b></td><td class="n"><b>'+tot.ans+' / '+tot.n+'</b></td><td class="n"><b>'+tot.got.toFixed(1).replace(".",",")+' / '+tot.max+'</b></td><td class="n grade '+tg.c+'"><b>'+fmt(tp)+'</b></td><td class="grade '+tg.c+'"><b>'+(tot.crit? 'Neconformitate critică, indiferent de procent' : tg.t)+'</b></td><td class="n"><b>'+tot.crit+'</b></td><td class="n"><b>'+tot.p2+'</b></td></tr>');
+    document.querySelector("#restable tbody").innerHTML = tb.join("");
+
+    // gaps
+    var lab = {partial:"Parțial", nu:"Nu"};
+    function list(arr, empty){ if (!arr.length) return '<p class="empty">'+empty+'</p>'; return '<ul>'+arr.map(function(g){ return '<li><b>'+g.id+'</b> ('+lab[g.a]+', R'+g.q.c+') '+esc(g.q.t)+' <span style="color:var(--muted)">· '+basisHtml(g.q.b)+'</span></li>'; }).join("")+'</ul>'; }
+    document.getElementById("gaps").innerHTML =
+      '<h3>Prioritate 1 · neconformități critice (R4 cu Nu / Parțial) · termen 5 zile lucrătoare</h3>'+list(gaps[1],"Nicio neconformitate critică înregistrată.")+
+      '<h3>Prioritate 2 · R3 cu Nu · termen 30 zile</h3>'+list(gaps[2],"Nimic de remediat la prioritatea 2.")+
+      '<h3>Prioritate 3 · celelalte răspunsuri Nu / Parțial · termen 90 zile</h3>'+list(gaps[3],"Nimic de remediat la prioritatea 3.");
+  }
+
+  function report(){
+    if (!last) return "";
+    var L = [];
+    L.push("CHESTIONAR DE AUTOEVALUARE CAE-RM-01 – raport");
+    L.push("Data: " + new Date().toLocaleDateString("ro-RO"));
+    L.push("");
+    last.rows.forEach(function(r){ L.push(r.a.id+". "+r.a.title+": "+fmt(r.p)+" ("+r.got.toFixed(1)+"/"+r.max+", "+r.ans+"/"+r.a.q.length+" răspunsuri, critice R4: "+r.crit+", R3=Nu: "+r.p2+") – "+grade(r.p).t); });
+    L.push("TOTAL: "+fmt(last.tp)+" ("+last.tot.got.toFixed(1)+"/"+last.tot.max+") – "+(last.tot.crit? "NECONFORMITATE CRITICĂ ("+last.tot.crit+" întrebări R4)" : grade(last.tp).t));
+    L.push("");
+    var lab = {partial:"Parțial", nu:"Nu"};
+    [[1,"PRIORITATE 1 (5 zile lucrătoare)"],[2,"PRIORITATE 2 (30 zile)"],[3,"PRIORITATE 3 (90 zile)"]].forEach(function(p){
+      L.push(p[1]+":");
+      if (!last.gaps[p[0]].length) L.push("  –");
+      last.gaps[p[0]].forEach(function(g){ var n = state[g.id] && state[g.id].n ? " | Obs.: "+state[g.id].n : ""; L.push("  "+g.id+" ["+lab[g.a]+", R"+g.q.c+"] "+g.q.t+" ("+g.q.b+")"+n); });
+      L.push("");
+    });
+    L.push("Răspunsuri N.A.:");
+    var na = [];
+    DATA.forEach(function(a){ a.q.forEach(function(q,i){ var id=a.id+(i+1); if (state[id] && state[id].a==="na") na.push("  "+id+(state[id].n? " | "+state[id].n : "")); }); });
+    L.push(na.length ? na.join("\n") : "  –");
+    return L.join("\n");
+  }
+
+  var status = document.getElementById("status");
+  document.getElementById("copyBtn").addEventListener("click", function(){
+    var txt = report(), ta = document.getElementById("reportText");
+    function fallback(){ ta.hidden = false; ta.value = txt; ta.style.width="100%"; ta.style.minHeight="200px"; ta.style.marginTop="10px"; ta.focus(); ta.select(); status.textContent = "Copierea automată nu este disponibilă aici; textul este selectat mai jos."; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function(){ status.textContent = "Raport copiat."; }, fallback);
+    } else fallback();
+  });
+  var cb = document.getElementById("confirmBox");
+  document.getElementById("resetBtn").addEventListener("click", function(){ cb.hidden = false; });
+  document.getElementById("resetNo").addEventListener("click", function(){ cb.hidden = true; });
+  document.getElementById("resetYes").addEventListener("click", function(){
+    state = {}; save(); cb.hidden = true;
+    areasEl.querySelectorAll('input[type=radio]').forEach(function(r){ r.checked = false; });
+    areasEl.querySelectorAll('input[type=text]').forEach(function(t){ t.value = ""; });
+    status.textContent = "Răspunsurile au fost șterse.";
+    compute();
+  });
+
+  var infoBtn = document.getElementById("infoBtn"), infoPop = document.getElementById("infoPop");
+  function setInfo(open){ infoPop.hidden = !open; infoBtn.setAttribute("aria-expanded", open ? "true" : "false"); if (open) infoPop.querySelector("a,button").focus({preventScroll:true}); }
+  infoBtn.addEventListener("click", function(){ setInfo(infoPop.hidden); });
+  document.getElementById("infoClose").addEventListener("click", function(){ setInfo(false); infoBtn.focus(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !infoPop.hidden) { setInfo(false); infoBtn.focus(); } });
+  document.addEventListener("click", function(e){ if (!infoPop.hidden && !infoPop.contains(e.target) && e.target !== infoBtn) setInfo(false); });
+
+  compute();
+})();
+</script>
+
+</body>
+</html>
