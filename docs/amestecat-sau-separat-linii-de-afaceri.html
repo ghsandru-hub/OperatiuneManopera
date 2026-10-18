@@ -1,0 +1,500 @@
+<!doctype html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Amestecat sau separat</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: argument -> vocabular -> cei doi algoritmi -> portofoliul de bază -> scenariile A (amestecat) și B (separat) cu comparație -> simulator pe linii -> liniile de acțiune. Roșu = adaos net scăzut / pierdere, albastru = adaos net crescut / profit, gri = neutru. */
+:root {
+  --bg: #f3f5f8; --surface: #ffffff; --surface-2: #e9edf3; --fg: #14171d; --muted: #5a6373; --line: #d5dbe4;
+  --hot: #d03b3b; --hot-soft: #fbe3e1; --cold: #2a78d6; --cold-soft: #dde9fa; --ok: #0ca30c; --avg: #14171d;
+  --font-display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #13161b; --surface: #1c2027; --surface-2: #262b34; --fg: #eef1f5; --muted: #a2abb8; --line: #333a45;
+    --hot: #e66767; --hot-soft: #3a2224; --cold: #3987e5; --cold-soft: #1f2d44; --ok: #3fbf3f; --avg: #eef1f5; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #13161b; --surface: #1c2027; --surface-2: #262b34; --fg: #eef1f5; --muted: #a2abb8; --line: #333a45;
+  --hot: #e66767; --hot-soft: #3a2224; --cold: #3987e5; --cold-soft: #1f2d44; --ok: #3fbf3f; --avg: #eef1f5; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.5; margin: 0; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 56px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.05; }
+h1 { font-size: clamp(2.4rem, 7vw, 4.4rem); font-weight: 900; font-stretch: 85%; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-weight: 800; font-stretch: 90%; letter-spacing: -0.01em; }
+h3 { font-size: 1.1rem; font-weight: 700; }
+p { margin: 0; max-width: 66ch; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.hot { color: var(--hot); } .cold { color: var(--cold); }
+section { display: grid; gap: 20px; }
+.section-head { display: grid; gap: 8px; }
+header { display: grid; gap: 18px; }
+.lede { font-size: 1.1rem; max-width: 64ch; }
+.card { background: var(--surface); border: 1px solid var(--line); padding: 20px; display: grid; gap: 12px; min-width: 0; align-content: start; }
+.card.tint { background: var(--surface-2); }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.k { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.card p { font-size: 0.95rem; }
+.big { font-family: var(--font-display); font-weight: 900; font-stretch: 85%; font-size: clamp(1.9rem, 4.5vw, 2.8rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.formula { font-family: var(--font-mono); font-size: 1.05rem; background: var(--surface-2); border-left: 4px solid var(--avg); padding: 12px 16px; overflow-x: auto; white-space: nowrap; }
+.card.lever-down { border-top: 6px solid var(--hot); } .card.lever-down .k { color: var(--hot); } .card.lever-down .formula { border-left-color: var(--hot); }
+.card.lever-up { border-top: 6px solid var(--cold); } .card.lever-up .k { color: var(--cold); } .card.lever-up .formula { border-left-color: var(--cold); }
+ul.tight { margin: 0; padding-left: 18px; font-size: 0.95rem; display: grid; gap: 4px; }
+/* flux decizional */
+.flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; background: var(--surface); border: 1px solid var(--line); }
+.flow .node { padding: 18px 16px; border-left: 1px solid var(--line); display: grid; gap: 8px; align-content: start; min-width: 0; position: relative; }
+.flow .node:first-child { border-left: 0; }
+.flow .node .n { font-family: var(--font-display); font-weight: 900; font-size: 1.4rem; color: var(--cold); line-height: 1; }
+.flow .node strong { font-size: 0.95rem; display: block; }
+.flow .node p { font-size: 0.88rem; color: var(--muted); }
+/* tabele */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { text-align: left; padding: 8px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+thead th { color: var(--muted); font-weight: 500; font-size: 0.76rem; letter-spacing: 0.04em; text-transform: uppercase; border-top: 0; }
+td.n, th.n { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tfoot th { font-weight: 600; border-top: 2px solid var(--fg); }
+td.neg, .neg { color: var(--hot); } td.pos, .pos { color: var(--cold); }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 0.74rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
+.pill.go { border-color: var(--ok); color: var(--ok); } .pill.no { border-color: var(--hot); color: var(--hot); } .pill.hold { border-color: var(--muted); color: var(--muted); }
+.pill.down { border-color: var(--hot); color: var(--hot); } .pill.up { border-color: var(--cold); color: var(--cold); }
+/* scenarii */
+.scen { display: grid; gap: 14px; }
+.scen .head { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: baseline; }
+.scen .head h3 { font-size: 1.3rem; }
+.scen.mixed .head h3 { color: var(--hot); } .scen.split .head h3 { color: var(--cold); }
+.scen .acts { display: grid; gap: 8px; font-size: 0.93rem; }
+.scen .acts li { display: grid; grid-template-columns: 120px 1fr; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); }
+.scen .acts li:first-child { border-top: 0; }
+.scen .acts ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.scen .acts .who { font-weight: 600; }
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.kpi { background: var(--surface-2); border: 1px solid var(--line); padding: 12px 14px; display: grid; gap: 4px; }
+.kpi .v { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 0.78rem; color: var(--muted); }
+.chart-wrap { position: relative; overflow-x: auto; }
+.chart-wrap svg { display: block; width: 100%; height: auto; max-width: 100%; font-family: var(--font-body); }
+.chart-wrap svg text { fill: var(--fg); font-size: 12px; }
+.chart-wrap svg text.axis { fill: var(--muted); font-size: 11px; font-family: var(--font-mono); }
+.chart-wrap svg text.val { font-family: var(--font-mono); font-size: 12px; font-weight: 600; }
+.chart-wrap svg .grid { stroke: var(--line); } .chart-wrap svg .zero { stroke: var(--fg); stroke-width: 1.25; }
+.chart-wrap svg .base { fill: var(--muted); } .chart-wrap svg .mixed { fill: var(--hot); } .chart-wrap svg .split { fill: var(--cold); }
+.chart-wrap svg .ref { stroke: var(--avg); stroke-dasharray: 4 4; stroke-width: 1.5; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px 22px; font-size: 0.85rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+.sw.base { background: var(--muted); } .sw.mixed { background: var(--hot); } .sw.split { background: var(--cold); }
+.sw.ref { width: 18px; height: 0; border-top: 2px dashed var(--avg); border-radius: 0; }
+/* simulator */
+.sim { display: grid; gap: 14px; }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; }
+button { font: inherit; font-size: 0.88rem; padding: 8px 14px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; border-radius: 4px; }
+button:hover { background: var(--surface-2); }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--cold); outline-offset: 1px; }
+button.active { border-color: var(--fg); background: var(--fg); color: var(--bg); }
+.sim select, .sim input { font: inherit; font-size: 0.88rem; padding: 5px 6px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 4px; }
+.sim input[type=number] { width: 72px; font-family: var(--font-mono); text-align: right; }
+.sim select { max-width: 190px; }
+.sim td { vertical-align: middle; }
+.sim .why { font-size: 0.8rem; color: var(--muted); display: block; }
+.sim .totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.note { font-size: 0.85rem; color: var(--muted); }
+/* linii de acțiune */
+.steps { display: grid; background: var(--surface); border: 1px solid var(--line); }
+.step { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 16px 20px; border-top: 1px solid var(--line); }
+.step:first-child { border-top: 0; }
+.step .n { font-family: var(--font-display); font-weight: 900; font-size: 1.5rem; line-height: 1; color: var(--cold); }
+.step strong { display: block; font-weight: 600; }
+.step p { font-size: 0.93rem; color: var(--muted); }
+details { background: var(--surface); border: 1px solid var(--line); }
+summary { cursor: pointer; padding: 12px 20px; font-weight: 600; font-size: 0.95rem; }
+details .inner { padding: 4px 20px 18px; display: grid; gap: 10px; font-size: 0.93rem; }
+footer { border-top: 1px solid var(--line); padding-top: 18px; font-size: 0.85rem; color: var(--muted); display: grid; gap: 6px; }
+@media (max-width: 760px) {
+  .grid3, .grid2, .kpis, .sim .totals { grid-template-columns: 1fr 1fr; }
+  .flow { grid-template-columns: 1fr; } .flow .node { border-left: 0; border-top: 1px solid var(--line); } .flow .node:first-child { border-top: 0; }
+  .scen .acts li { grid-template-columns: 1fr; gap: 2px; }
+  .wrap { gap: 44px; padding-block: 28px 44px; }
+}
+@media (max-width: 480px) { .grid3, .grid2, .kpis, .sim .totals { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style></head><body>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Continuarea parabolei plitei și a cubului de gheață · decizii de preț și de cheltuieli de vânzare</div>
+  <h1>Amestecat sau separat</h1>
+  <p class="lede">A amesteca liniile de afaceri într-un singur cont de rezultat nu este o simplificare contabilă nevinovată. Este o decizie de management care obligă firma să ia aceeași decizie pentru activități care au nevoie de decizii opuse. Mai jos: de ce, cu ce algoritmi se decide corect și ce se întâmplă, în cifre, când același portofoliu este condus amestecat și apoi separat.</p>
+</header>
+
+<!-- 1. De ce -->
+<section aria-labelledby="s1">
+  <div class="section-head">
+    <div class="eyebrow">1 · Diagnosticul</div>
+    <h2 id="s1">De ce nu este sănătos să amesteci liniile de afaceri</h2>
+  </div>
+  <div class="grid3">
+    <div class="card"><div class="k hot">Semnalul de preț dispare</div><p>Prețul fiecărei linii ar trebui să răspundă la marja ei și la piața ei. Amestecate, toate primesc aceeași politică: un adaos-țintă unic, o listă de prețuri unică, un comision unic. Linia competitivă este supraprețuită, linia în pierdere este subprețuită.</p></div>
+    <div class="card"><div class="k hot">Subvenția încrucișată devine invizibilă</div><p>Clienții liniilor profitabile plătesc pierderile celorlalte. Un concurent specializat pe linia profitabilă vine cu un preț mai mic, pentru că nu are de cărat nicio pierdere, și ia exact clienții care țineau firma în viață.</p></div>
+    <div class="card"><div class="k hot">Capitalul se duce după venit, nu după randament</div><p>Bugetele de investiții, de ofertare și de promovare se împart după ponderea în venituri. Linia care pierde 12 bani la fiecare leu vândut primește bani ca să vândă mai mult, adică să piardă mai mult.</p></div>
+    <div class="card"><div class="k hot">Aceeași decizie, efecte opuse</div><p>O reducere de preț de 4 % trebuie să aducă 15 % volum în plus la o linie cu adaos net de 31 % și 200 % volum în plus la una cu 6 %. La o linie cu adaos negativ, orice volum în plus mărește pierderea. O singură decizie nu poate fi corectă pentru toate.</p></div>
+    <div class="card"><div class="k hot">Nimeni nu răspunde de rezultat</div><p>Fără cont de rezultat pe linie, nu există un responsabil care să explice marja ei. Pierderea unei linii este „a firmei”, deci a nimănui, și se discută abia când rezultatul total devine negativ.</p></div>
+    <div class="card"><div class="k hot">Pierderea iese la iveală târziu</div><p>Cât timp media arată bine, nimeni nu caută. Linia care pierde 35 % din tot ce facturează este invizibilă la 5 % din venituri. Se vede abia când liniile profitabile slăbesc și nu mai pot acoperi.</p></div>
+  </div>
+</section>
+
+<!-- 2. Vocabular + algoritmi -->
+<section aria-labelledby="s2">
+  <div class="section-head">
+    <div class="eyebrow">2 · Cele două manete și algoritmii lor</div>
+    <h2 id="s2">Scad adaosul net sau cresc adaosul net</h2>
+    <p class="muted">Orice decizie comercială pe o linie se reduce la una dintre două mișcări asupra adaosului net pe leu vândut. Fiecare are un prag calculabil, iar pragul depinde de adaosul net al liniei respective, nu de media firmei.</p>
+  </div>
+  <div class="card tint">
+    <div class="k">Definiții folosite în pagină</div>
+    <ul class="tight">
+      <li><strong>Adaos brut</strong> = venit − costul direct al lucrării (manoperă, materiale, subcontractare, echipamente dedicate).</li>
+      <li><strong>Adaos net</strong> = adaos brut − cheltuieli de vânzare (ofertare, comisioane, promovare, deplasări comerciale). Se exprimă ca procent din venit și se notează <span class="num">m</span>.</li>
+      <li><strong>Profit operațional</strong> = suma adaosurilor nete ale liniilor − costurile comune ale firmei (sediu, administrație, finanțare), care nu se schimbă la deciziile de mai jos.</li>
+    </ul>
+  </div>
+  <div class="grid2">
+    <div class="card lever-down">
+      <div class="k">Maneta 1 · scad adaosul net</div>
+      <h3>Scad prețul cu p % sau cresc cheltuielile de vânzare cu d puncte din venit</h3>
+      <p>Ambele cumpără volum plătind cu adaos net pe leu vândut. Sunt aceeași mișcare economică și au același prag: volumul suplimentar trebuie să compenseze adaosul cedat pe tot volumul, inclusiv pe cel vechi.</p>
+      <div class="formula">merită dacă ΔQ &gt; x / (m − x), unde x = p sau d</div>
+      <ul class="tight">
+        <li>m = 31 %, p = 4 % → volumul trebuie să crească cu peste <span class="num">14,8 %</span>.</li>
+        <li>m = 6 %, p = 4 % → volumul trebuie să crească cu peste <span class="num">200 %</span>.</li>
+        <li>m ≤ x → <strong>niciodată</strong>: adaosul net ajunge la zero sau sub zero și fiecare lucrare nouă adâncește pierderea.</li>
+      </ul>
+    </div>
+    <div class="card lever-up">
+      <div class="k">Maneta 2 · cresc adaosul net</div>
+      <h3>Cresc prețul cu p %</h3>
+      <p>Câștig adaos net pe fiecare leu vândut și accept să pierd o parte din volum. Pragul spune cât volum pot pierde înainte ca mișcarea să nu mai merite.</p>
+      <div class="formula">merită dacă pierderea de volum &lt; p / (m + p)</div>
+      <ul class="tight">
+        <li>m = 31 %, p = 4 % → pot pierde cel mult <span class="num">11,4 %</span> din volum.</li>
+        <li>m = 6 %, p = 5 % → pot pierde până la <span class="num">45 %</span> din volum.</li>
+        <li>m &lt; 0 → <strong>aproape întotdeauna</strong>: cât timp adaosul rămâne negativ, fiecare client pierdut este o pierdere evitată.</li>
+      </ul>
+    </div>
+  </div>
+  <details>
+    <summary>De unde vin cele două praguri</summary>
+    <div class="inner">
+      <p>Adaosul net total al unei linii este Q · P · m, unde Q este volumul, P prețul și m adaosul net procentual. La o scădere de preț cu fracția p, adaosul net pe unitate devine P(m − p). Mișcarea merită dacă Q(1 + ΔQ) · P(m − p) &gt; Q · P · m, adică ΔQ &gt; p / (m − p). Creșterea cheltuielilor de vânzare cu d din venit reduce adaosul net pe unitate la P(m − d), deci are același prag. La o creștere de preț cu p, adaosul pe unitate devine P(m + p) și mișcarea merită cât timp Q(1 − pierdere) · P(m + p) &gt; Q · P · m, adică pierderea &lt; p / (m + p). Costul direct este considerat proporțional cu volumul, iar cheltuielile de vânzare proporționale cu venitul.</p>
+    </div>
+  </details>
+</section>
+
+<!-- 3. Flux -->
+<section aria-labelledby="s3">
+  <div class="section-head">
+    <div class="eyebrow">3 · Algoritmul decizional pe linie</div>
+    <h2 id="s3">Cinci pași, repetați pentru fiecare linie</h2>
+  </div>
+  <div class="flow">
+    <div class="node"><div class="n">1</div><strong>Măsoară m al liniei</strong><p>Adaosul net procentual al liniei, cu costurile ei directe și cheltuielile ei de vânzare. Nu media firmei.</p></div>
+    <div class="node"><div class="n">2</div><strong>Compară cu pragul firmei</strong><p>Costul capitalului plus cota de costuri comune. În exemplu: 12 %. Peste prag: linia poate cumpăra volum. Sub prag: linia trebuie să câștige adaos.</p></div>
+    <div class="node"><div class="n">3</div><strong>Alege maneta</strong><p>m peste prag și capacitate liberă → scad preț sau cresc cheltuieli de vânzare. m sub prag → cresc preț, apoi reduc costul. m negativ → cresc preț până la cost complet sau opresc vânzarea.</p></div>
+    <div class="node"><div class="n">4</div><strong>Calculează pragul mișcării</strong><p>Maneta 1: ΔQ necesar = x / (m − x). Maneta 2: pierdere tolerabilă = p / (m + p). Pragul vine din m al liniei, deci diferă de la o linie la alta.</p></div>
+    <div class="node"><div class="n">5</div><strong>Compară cu răspunsul pieței</strong><p>Estimarea de volum a liniei (elasticitate, capacitate, concurență). Peste prag: execut și verific lunar. Sub prag: nu execut, oricât de bine arată media.</p></div>
+  </div>
+</section>
+
+<!-- 4. Portofoliu -->
+<section aria-labelledby="s4">
+  <div class="section-head">
+    <div class="eyebrow">4 · Portofoliul de pornire</div>
+    <h2 id="s4">Aceleași cinci linii, cu structura de cost și răspunsul pieței</h2>
+    <p class="muted">Cifre ilustrative, mii lei pe an. Răspunsul pieței este presupunerea comercială a fiecărei linii: cu cât se schimbă volumul la 1 % schimbare de preț și la 1 punct din venit cheltuit în plus pe vânzare.</p>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="table-wrap">
+      <table id="baseTable">
+        <thead><tr><th>Linie</th><th class="n">Venit</th><th class="n">Cost direct</th><th class="n">Chelt. vânzare</th><th class="n">Adaos brut</th><th class="n">Adaos net</th><th class="n">m</th><th class="n">Volum la +1 % preț</th><th class="n">Volum la +1 pct vânzare</th></tr></thead>
+        <tbody></tbody>
+        <tfoot><tr><th>Total</th><th class="n">12 000</th><th class="n">9 173</th><th class="n">1 092</th><th class="n">2 827</th><th class="n">1 735</th><th class="n">14,5 %</th><th class="n"></th><th class="n"></th></tr></tfoot>
+      </table>
+    </div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="v num">1 735</div><div class="l">adaos net total, mii lei</div></div>
+    <div class="kpi"><div class="v num">− 1 000</div><div class="l">costuri comune ale firmei, mii lei</div></div>
+    <div class="kpi"><div class="v num">735</div><div class="l">profit operațional de pornire, mii lei (6,1 % din venit)</div></div>
+  </div>
+</section>
+
+<!-- 5. Scenarii -->
+<section aria-labelledby="s5">
+  <div class="section-head">
+    <div class="eyebrow">5 · Exemplul practic</div>
+    <h2 id="s5">Același portofoliu, condus amestecat și apoi separat</h2>
+  </div>
+
+  <div class="grid2">
+    <div class="card scen mixed">
+      <div class="head"><span class="eyebrow">Scenariul A · amestecat</span><h3>O singură cifră, o singură decizie</h3></div>
+      <p>Consiliul vede adaosul net mediu de 14,5 %, peste pragul de 12 %, și trage concluzia că „afacerea merge” și „merită să creștem”. Pentru că nu există conturi pe linie, decizia se aplică uniform.</p>
+      <div class="k hot">Liniile de acțiune A1 · „cumpărăm volum”</div>
+      <div class="acts"><ul>
+        <li><span class="who">Preț</span><span>Reducere de 4 % pe toată lista de prețuri, la toate liniile.</span></li>
+        <li><span class="who">Vânzare</span><span>Bugetul de ofertare și comisioanele cresc cu 1 punct din venit, la toate liniile.</span></li>
+        <li><span class="who">Verificare</span><span>Pe medie: 4 / (14,5 − 4) = 38 % volum în plus necesar. Nimeni nu calculează asta pe linie.</span></li>
+      </ul></div>
+      <div class="kpis" id="kpiA1"></div>
+      <p class="note">Venitul crește cu 4,9 %, adaosul net scade cu 350 mii lei. Instalațiile abia își acoperă reducerea, Structurile și Finisajele pierd adaos pe tot volumul vechi, iar Mentenanța și Proiectarea vând mai mult în pierdere. Profitul operațional se înjumătățește.</p>
+      <div class="k hot">Liniile de acțiune A2 · „protejăm marja”</div>
+      <div class="acts"><ul>
+        <li><span class="who">Preț</span><span>Majorare de 4 % pe toată lista, la toate liniile.</span></li>
+        <li><span class="who">Vânzare</span><span>Neschimbată.</span></li>
+      </ul></div>
+      <div class="kpis" id="kpiA2"></div>
+      <p class="note">Mai bine decât A1, dar tot orb: Instalațiile pierd 12 % din volum în fața unui concurent specializat și ies în minus, iar Mentenanța și Proiectarea rămân în pierdere, pentru că 4 % nu ajunge nici pe departe acolo unde era nevoie de 15 % și 45 %.</p>
+    </div>
+
+    <div class="card scen split">
+      <div class="head"><span class="eyebrow">Scenariul B · separat</span><h3>Cinci conturi, cinci decizii</h3></div>
+      <p>Fiecare linie are propriul adaos net, propriul responsabil și propria estimare de răspuns al pieței. Algoritmul din secțiunea 3 se rulează de cinci ori și dă cinci răspunsuri diferite.</p>
+      <div class="k cold">Liniile de acțiune B · decizie pe linie</div>
+      <div class="acts"><ul>
+        <li><span class="who">Instalații <span class="num muted">31 %</span></span><span><strong>Scad adaosul net</strong>: preț neschimbat, cheltuieli de vânzare +1,5 puncte (mai multe oferte depuse). Prag: ΔQ &gt; 5,1 %. Răspuns așteptat: +9 %. <span class="pill go">execut</span></span></li>
+        <li><span class="who">Structuri <span class="num muted">24 %</span></span><span><strong>Cresc adaosul net</strong>: preț +2 %. Pierdere tolerabilă: 7,7 %. Răspuns așteptat: −3 %. <span class="pill go">execut</span></span></li>
+        <li><span class="who">Finisaje <span class="num muted">6 %</span></span><span><strong>Cresc adaosul net</strong>: preț +5 %. Pierdere tolerabilă: 45 %. Răspuns așteptat: −6 %. Nicio reducere de preț: ar cere +200 % volum. <span class="pill go">execut</span></span></li>
+        <li><span class="who">Mentenanță <span class="num muted">−12 %</span></span><span><strong>Cresc adaosul net</strong>: preț +15 % la reînnoirea contractelor. Cu adaos negativ, orice client pierdut este o pierdere evitată. Răspuns așteptat: −9 %. <span class="pill go">execut</span></span></li>
+        <li><span class="who">Proiectare <span class="num muted">−35 %</span></span><span><strong>Cresc adaosul net</strong>: preț +45 %, la nivelul costului complet, sau opresc vânzarea externă și păstrez proiectarea doar ca suport intern. Răspuns așteptat: −22,5 %. <span class="pill go">execut</span></span></li>
+      </ul></div>
+      <div class="kpis" id="kpiB"></div>
+      <p class="note">Venitul crește cu 2,9 %, mai puțin decât în A1, dar adaosul net crește cu 593 mii lei. Două treimi din câștig vin din cele două linii pe care scenariul amestecat le-ar fi hrănit cu volum. Profitul operațional crește cu 81 %.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div><strong>Profitul operațional în cele patru situații</strong><br><span class="muted" style="font-size:.9rem">mii lei pe an, după costurile comune de 1 000 mii lei</span></div>
+    <div class="chart-wrap" id="chartCompare"></div>
+    <div class="legend"><span><i class="sw base"></i>pornire</span><span><i class="sw mixed"></i>amestecat</span><span><i class="sw split"></i>separat</span></div>
+  </div>
+</section>
+
+<!-- 6. Simulator -->
+<section aria-labelledby="s6">
+  <div class="section-head">
+    <div class="eyebrow">6 · Simulator</div>
+    <h2 id="s6">Rulează algoritmul pe fiecare linie</h2>
+    <p class="muted">Stabilește pentru fiecare linie schimbarea de preț și de cheltuieli de vânzare. Verdictul aplică pragurile din secțiunea 2 la adaosul net al liniei; totalurile arată efectul asupra firmei.</p>
+  </div>
+  <div class="card sim">
+    <div class="presets">
+      <button type="button" data-preset="base" id="pBase">Pornire</button>
+      <button type="button" data-preset="a1" id="pA1">A1 · amestecat: cumpărăm volum</button>
+      <button type="button" data-preset="a2" id="pA2">A2 · amestecat: protejăm marja</button>
+      <button type="button" data-preset="b" id="pB">B · separat: decizie pe linie</button>
+    </div>
+    <div class="table-wrap">
+      <table id="simTable">
+        <thead><tr><th>Linie</th><th class="n">m</th><th class="n">Preț (%)</th><th class="n">Chelt. vânzare (+pct)</th><th>Efect pe adaosul net</th><th class="n">Prag</th><th class="n">Răspuns piață (ΔQ %)</th><th>Verdict</th><th class="n">Adaos net nou</th><th class="n">Δ</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="totals" id="simTotals"></div>
+    <p class="note">Prețul se introduce în procente (negativ = reducere, pozitiv = majorare), cheltuielile de vânzare în puncte din venit adăugate. Efectul net asupra adaosului este preț − vânzare: negativ înseamnă maneta 1 (scad adaosul net), pozitiv maneta 2 (cresc adaosul net). Pragul este volumul minim de câștigat (maneta 1) sau volumul maxim de pierdut (maneta 2). Răspunsul pieței se completează din presupunerile liniei și poate fi corectat.</p>
+  </div>
+</section>
+
+<!-- 7. Linii de acțiune organizaționale -->
+<section aria-labelledby="s7">
+  <div class="section-head">
+    <div class="eyebrow">7 · Cum treci de la amestecat la separat</div>
+    <h2 id="s7">Liniile de acțiune pentru următoarele 90 de zile</h2>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><div><strong>Un cont de rezultat pe linie, lunar</strong><p>Venit, cost direct (manoperă pe pontaje, materiale pe comenzi, subcontractare pe contracte), cheltuieli de vânzare atribuite liniei. Costurile comune rămân deoparte, sub linie, ca să nu murdărească adaosul net.</p></div></div>
+    <div class="step"><div class="n">2</div><div><strong>Un responsabil și un prag pe linie</strong><p>Fiecare linie are un nume care răspunde de m și același prag pentru toate: costul capitalului plus cota de costuri comune. Pragul este al firmei, decizia este a liniei.</p></div></div>
+    <div class="step"><div class="n">3</div><div><strong>Politica de preț se scrie pe linie</strong><p>Lista de prețuri, discounturile și comisioanele se stabilesc separat, din m al liniei și din pragul manetei alese. O reducere comercială se aprobă doar cu calculul ΔQ necesar atașat.</p></div></div>
+    <div class="step"><div class="n">4</div><div><strong>Bugetul de vânzare se alocă după răspuns, nu după venit</strong><p>Punctele din venit cheltuite pe ofertare merg acolo unde aduc cel mai mult volum pe un adaos net pozitiv. Liniile cu m sub prag nu primesc buget de creștere până nu trec pragul.</p></div></div>
+    <div class="step"><div class="n">5</div><div><strong>Liniile cu adaos negativ primesc termen</strong><p>Plan de repreț la cost complet, reducere de cost și o dată de reevaluare. La termen, linia trece pragul sau își oprește vânzarea externă. Subvenția încrucișată fără termen nu mai este o opțiune.</p></div></div>
+    <div class="step"><div class="n">6</div><div><strong>Revizie lunară a pragurilor față de realitate</strong><p>Răspunsul pieței presupus se compară cu cel observat. Dacă volumul nu vine, maneta se retrage. Algoritmul nu înlocuiește observația, o disciplinează.</p></div></div>
+  </div>
+</section>
+
+<footer>
+  <div>Cifrele portofoliului și răspunsurile pieței sunt ilustrative. Modelul este liniar și local: valabil pentru schimbări de câteva procente; la mișcări mari, ca cele ale liniilor în pierdere, răspunsul real se verifică pe fiecare contract. Costul direct este considerat proporțional cu volumul, cheltuielile de vânzare proporționale cu venitul, costurile comune constante.</div>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var COMMON = 1000;
+  var lines = [
+    { name: 'Instalații', V: 3100, CD: 1899, CV: 240, e: -3.0, k: 6 },
+    { name: 'Structuri',  V: 4200, CD: 2900, CV: 292, e: -1.5, k: 2 },
+    { name: 'Finisaje',   V: 2600, CD: 2184, CV: 260, e: -1.2, k: 1.5 },
+    { name: 'Mentenanță', V: 1500, CD: 1500, CV: 180, e: -0.6, k: 0.5 },
+    { name: 'Proiectare', V: 600,  CD: 690,  CV: 120, e: -0.5, k: 0.3 }
+  ];
+  lines.forEach(function (l) { l.net = l.V - l.CD - l.CV; l.m = l.net / l.V * 100; });
+  var baseNet = lines.reduce(function (s, l) { return s + l.net; }, 0);
+  var baseV = lines.reduce(function (s, l) { return s + l.V; }, 0);
+
+  function fmt(n) { var r = Math.round(n); return (r < 0 ? '−' : '') + String(Math.abs(r)).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function fmt1(n) { var s = Math.abs(n).toFixed(1).replace('.', ','); return (n < 0 ? '−' : '') + s; }
+  function signed(n) { var r = Math.round(n); return (r > 0 ? '+' : r < 0 ? '−' : '') + String(Math.abs(r)).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+  // acțiune pe linie: p = schimbare de preț în %, d = puncte din venit adăugate la cheltuielile de vânzare, q = ΔQ % (null = din presupunerile liniei)
+  function defaultQ(l, p, d) { return l.e * p + l.k * d; }
+  function apply(l, p, d, q) {
+    var V2 = l.V * (1 + p / 100) * (1 + q / 100);
+    var CD2 = l.CD * (1 + q / 100);
+    var CV2 = (l.CV / l.V + d / 100) * V2;
+    return { V: V2, net: V2 - CD2 - CV2 };
+  }
+  // efectul net asupra adaosului: x = p − d (puncte procentuale din preț)
+  function verdict(l, p, d, q) {
+    var m = l.m, x = p - d;
+    if (!p && !d) return { cls: 'hold', txt: 'mențin', lever: '—', thr: '—', why: '' };
+    if (Math.abs(x) < 1e-9) return { cls: 'hold', txt: 'neutru', lever: 'adaos net neschimbat', thr: '—', why: 'prețul și vânzarea se compensează; contează doar volumul' };
+    if (x < 0) {
+      var xx = -x, lever = 'scad adaosul net cu ' + fmt1(xx) + ' pct';
+      if (m <= xx) return { cls: 'no', txt: 'nu execut', lever: lever, thr: 'niciodată', why: 'm ≤ ' + fmt1(xx) + ' %: adaosul net ar ajunge la zero sau sub zero' };
+      var need = xx / (m - xx) * 100;
+      return { cls: q > need ? 'go' : 'no', txt: q > need ? 'execut' : 'nu execut', lever: lever, thr: 'ΔQ > ' + fmt1(need) + ' %', why: fmt1(xx) + ' / (' + fmt1(m) + ' − ' + fmt1(xx) + ')' };
+    }
+    var lever2 = 'cresc adaosul net cu ' + fmt1(x) + ' pct';
+    if (m + x <= 0) return { cls: 'go', txt: 'execut', lever: lever2, thr: 'orice pierdere', why: 'adaosul rămâne negativ: fiecare client pierdut e pierdere evitată' };
+    var tol = x / (m + x) * 100, loss = -q;
+    return { cls: loss < tol ? 'go' : 'no', txt: loss < tol ? 'execut' : 'nu execut', lever: lever2, thr: 'pierdere < ' + fmt1(tol) + ' %', why: fmt1(x) + ' / (' + fmt1(m) + ' + ' + fmt1(x) + ')' };
+  }
+  function runScenario(acts) {
+    var tv = 0, tn = 0, rows = [];
+    lines.forEach(function (l, i) {
+      var a = acts[i];
+      var q = (a.q === undefined || a.q === null) ? defaultQ(l, a.p, a.d) : a.q;
+      var r = apply(l, a.p, a.d, q);
+      rows.push({ l: l, a: a, q: q, V: r.V, net: r.net, delta: r.net - l.net, v: verdict(l, a.p, a.d, q) });
+      tv += r.V; tn += r.net;
+    });
+    return { rows: rows, V: tv, net: tn, profit: tn - COMMON };
+  }
+  var presets = {
+    base: lines.map(function () { return { p: 0, d: 0 }; }),
+    a1: lines.map(function () { return { p: -4, d: 1 }; }),
+    a2: lines.map(function () { return { p: 4, d: 0 }; }),
+    b: [{ p: 0, d: 1.5 }, { p: 2, d: 0 }, { p: 5, d: 0 }, { p: 15, d: 0 }, { p: 45, d: 0 }]
+  };
+
+  // Tabel portofoliu
+  var tb = document.querySelector('#baseTable tbody');
+  tb.innerHTML = lines.map(function (l) {
+    var c = l.net < 0 ? ' neg' : ' pos';
+    return '<tr><td>' + esc(l.name) + '</td><td class="n">' + fmt(l.V) + '</td><td class="n">' + fmt(l.CD) + '</td><td class="n">' + fmt(l.CV) + '</td><td class="n">' + fmt(l.V - l.CD) +
+      '</td><td class="n' + c + '">' + fmt(l.net) + '</td><td class="n' + c + '">' + fmt1(l.m) + ' %</td><td class="n">' + fmt1(l.e) + ' %</td><td class="n">+' + fmt1(l.k) + ' %</td></tr>';
+  }).join('');
+
+  // KPI scenarii
+  function kpis(el, res) {
+    var dv = (res.V / baseV - 1) * 100, dn = res.net - baseNet, dp = res.profit - (baseNet - COMMON);
+    el.innerHTML =
+      '<div class="kpi"><div class="v num">' + fmt(res.V) + '</div><div class="l">venit, mii lei (' + (dv >= 0 ? '+' : '−') + fmt1(Math.abs(dv)) + ' %)</div></div>' +
+      '<div class="kpi"><div class="v num ' + (dn < 0 ? 'hot' : 'cold') + '">' + signed(dn) + '</div><div class="l">adaos net față de pornire, mii lei</div></div>' +
+      '<div class="kpi"><div class="v num ' + (dp < 0 ? 'hot' : 'cold') + '">' + fmt(res.profit) + '</div><div class="l">profit operațional, mii lei (pornire 735)</div></div>';
+  }
+  var resA1 = runScenario(presets.a1), resA2 = runScenario(presets.a2), resB = runScenario(presets.b);
+  kpis(document.getElementById('kpiA1'), resA1);
+  kpis(document.getElementById('kpiA2'), resA2);
+  kpis(document.getElementById('kpiB'), resB);
+
+  // Grafic comparativ
+  (function () {
+    var items = [
+      { label: 'Pornire', v: baseNet - COMMON, cls: 'base' },
+      { label: 'A1 amestecat', sub: 'cumpărăm volum', v: resA1.profit, cls: 'mixed' },
+      { label: 'A2 amestecat', sub: 'protejăm marja', v: resA2.profit, cls: 'mixed' },
+      { label: 'B separat', sub: 'decizie pe linie', v: resB.profit, cls: 'split' }
+    ];
+    var W = 720, H = 300, left = 60, right = 700, top = 30, bottom = 250, maxV = 1500, py = (bottom - top) / maxV;
+    var y = function (v) { return bottom - v * py; };
+    var slot = (right - left) / items.length, bw = 72;
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Profit operațional în mii lei: pornire ' + fmt(items[0].v) + ', A1 ' + fmt(items[1].v) + ', A2 ' + fmt(items[2].v) + ', B ' + fmt(items[3].v) + '">';
+    [0, 500, 1000, 1500].forEach(function (t) {
+      s += '<line class="' + (t === 0 ? 'zero' : 'grid') + '" x1="' + left + '" y1="' + y(t) + '" x2="' + right + '" y2="' + y(t) + '"/>';
+      s += '<text class="axis" x="' + (left - 8) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + fmt(t) + '</text>';
+    });
+    s += '<line class="ref" x1="' + left + '" y1="' + y(baseNet - COMMON) + '" x2="' + right + '" y2="' + y(baseNet - COMMON) + '"/>';
+    items.forEach(function (it, i) {
+      var cx = left + slot * i + slot / 2, bx = cx - bw / 2, r = 4;
+      s += '<path class="' + it.cls + '" d="M' + bx + ' ' + y(0) + 'V' + (y(it.v) + r) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + (-r) + 'H' + (bx + bw - r) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + r + 'V' + y(0) + 'Z"/>';
+      s += '<text class="val" x="' + cx + '" y="' + (y(it.v) - 8) + '" text-anchor="middle">' + fmt(it.v) + '</text>';
+      s += '<text x="' + cx + '" y="' + (bottom + 18) + '" text-anchor="middle" font-weight="600">' + esc(it.label) + '</text>';
+      if (it.sub) s += '<text class="axis" x="' + cx + '" y="' + (bottom + 33) + '" text-anchor="middle">' + esc(it.sub) + '</text>';
+    });
+    s += '</svg>';
+    document.getElementById('chartCompare').innerHTML = s;
+  })();
+
+  // Simulator
+  var simBody = document.querySelector('#simTable tbody');
+  var simTotals = document.getElementById('simTotals');
+  var state = [];
+
+  function buildRows() {
+    simBody.innerHTML = lines.map(function (l, i) {
+      var c = l.net < 0 ? ' neg' : ' pos';
+      return '<tr data-i="' + i + '"><td><strong>' + esc(l.name) + '</strong></td><td class="n' + c + '">' + fmt1(l.m) + ' %</td>' +
+        '<td class="n"><input id="p' + i + '" type="number" step="0.5" aria-label="Schimbare de preț ' + esc(l.name) + '"></td>' +
+        '<td class="n"><input id="d' + i + '" type="number" min="0" step="0.5" aria-label="Cheltuieli de vânzare suplimentare ' + esc(l.name) + '"></td>' +
+        '<td class="lev"></td><td class="n thr"></td>' +
+        '<td class="n"><input id="q' + i + '" type="number" step="0.5" aria-label="Răspuns piață ' + esc(l.name) + '"></td>' +
+        '<td class="ver"></td><td class="n newnet"></td><td class="n delta"></td></tr>';
+    }).join('');
+    lines.forEach(function (l, i) {
+      var pi = document.getElementById('p' + i), di = document.getElementById('d' + i), qi = document.getElementById('q' + i);
+      pi.addEventListener('input', function () { state[i].p = parseFloat(pi.value) || 0; state[i].q = null; render(false); });
+      di.addEventListener('input', function () { state[i].d = Math.max(0, parseFloat(di.value) || 0); state[i].q = null; render(false); });
+      qi.addEventListener('input', function () { var v = parseFloat(qi.value); state[i].q = isNaN(v) ? null : v; render(false); });
+    });
+  }
+  function render(fill) {
+    var res = runScenario(state);
+    res.rows.forEach(function (r, i) {
+      var tr = simBody.querySelector('tr[data-i="' + i + '"]');
+      var pi = document.getElementById('p' + i), di = document.getElementById('d' + i), qi = document.getElementById('q' + i);
+      if (fill) { pi.value = r.a.p; di.value = r.a.d; }
+      if (fill || r.a.q === null) qi.value = Math.round(r.q * 10) / 10;
+      var levCls = r.v.lever.indexOf('scad') === 0 ? 'down' : r.v.lever.indexOf('cresc') === 0 ? 'up' : 'hold';
+      tr.querySelector('.lev').innerHTML = r.v.lever === '—' ? '<span class="muted">—</span>' : '<span class="pill ' + levCls + '">' + esc(r.v.lever) + '</span>';
+      tr.querySelector('.thr').innerHTML = esc(r.v.thr) + (r.v.why ? '<span class="why">' + esc(r.v.why) + '</span>' : '');
+      tr.querySelector('.ver').innerHTML = '<span class="pill ' + r.v.cls + '">' + r.v.txt + '</span>';
+      tr.querySelector('.newnet').innerHTML = '<span class="' + (r.net < 0 ? 'neg' : 'pos') + '">' + fmt(r.net) + '</span>';
+      tr.querySelector('.delta').innerHTML = '<span class="' + (r.delta < -0.5 ? 'neg' : r.delta > 0.5 ? 'pos' : 'muted') + '">' + signed(r.delta) + '</span>';
+    });
+    var dp = res.profit - (baseNet - COMMON);
+    simTotals.innerHTML =
+      '<div class="kpi"><div class="v num">' + fmt(res.V) + '</div><div class="l">venit total, mii lei (pornire ' + fmt(baseV) + ')</div></div>' +
+      '<div class="kpi"><div class="v num">' + fmt(res.net) + '</div><div class="l">adaos net total, mii lei (pornire ' + fmt(baseNet) + ')</div></div>' +
+      '<div class="kpi"><div class="v num ' + (res.profit < baseNet - COMMON ? 'hot' : 'cold') + '">' + fmt(res.profit) + '</div><div class="l">profit operațional, mii lei (pornire ' + fmt(baseNet - COMMON) + ')</div></div>' +
+      '<div class="kpi"><div class="v num ' + (dp < 0 ? 'hot' : 'cold') + '">' + signed(dp) + '</div><div class="l">față de pornire, mii lei</div></div>';
+  }
+  function setPreset(key, btn) {
+    document.querySelectorAll('.presets button').forEach(function (b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    state = presets[key].map(function (a) { return { p: a.p, d: a.d, q: null }; });
+    render(true);
+  }
+  buildRows();
+  document.querySelectorAll('.presets button').forEach(function (b) { b.addEventListener('click', function () { setPreset(b.getAttribute('data-preset'), b); }); });
+  setPreset('b', document.getElementById('pB'));
+})();
+</script>
+</body></html>
