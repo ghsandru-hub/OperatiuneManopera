@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plita și cubul de gheață</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,500..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: un poster vertical în benzi: parabola (cald / rece / medie) -> graficul marjei pe linii -> cascada subvenției -> antidot. Culoarea codifică polaritatea: roșu = cald/pierdere, albastru = rece/profit, gri = media. */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #e9edf3;
+  --fg: #14171d;
+  --muted: #5a6373;
+  --line: #d5dbe4;
+  --hot: #d03b3b;
+  --hot-soft: #fbe3e1;
+  --cold: #2a78d6;
+  --cold-soft: #dde9fa;
+  --avg: #14171d;
+  --font-display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #13161b; --surface: #1c2027; --surface-2: #262b34; --fg: #eef1f5; --muted: #a2abb8; --line: #333a45;
+    --hot: #e66767; --hot-soft: #3a2224; --cold: #3987e5; --cold-soft: #1f2d44; --avg: #eef1f5;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #13161b; --surface: #1c2027; --surface-2: #262b34; --fg: #eef1f5; --muted: #a2abb8; --line: #333a45;
+  --hot: #e66767; --hot-soft: #3a2224; --cold: #3987e5; --cold-soft: #1f2d44; --avg: #eef1f5;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.5; margin: 0; }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 56px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.05; }
+h1 { font-size: clamp(2.4rem, 7vw, 4.6rem); font-weight: 900; font-stretch: 85%; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-weight: 800; font-stretch: 90%; letter-spacing: -0.01em; }
+h3 { font-size: 1.1rem; font-weight: 700; }
+p { margin: 0; max-width: 64ch; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+section { display: grid; gap: 20px; }
+.section-head { display: grid; gap: 8px; }
+
+/* Antet */
+header { display: grid; gap: 18px; }
+header .quote { border-left: 4px solid var(--avg); padding-left: 18px; display: grid; gap: 6px; }
+header blockquote { margin: 0; font-size: 1.15rem; font-weight: 500; max-width: 60ch; }
+header cite { font-style: normal; font-size: 0.9rem; color: var(--muted); }
+.lede { font-size: 1.1rem; max-width: 62ch; }
+
+/* Parabola: trei celule termice */
+.thermo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.cell { background: var(--surface); border: 1px solid var(--line); padding: 20px 20px 18px; display: grid; gap: 10px; align-content: start; position: relative; min-width: 0; }
+.cell .tag { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.cell .deg { font-family: var(--font-display); font-weight: 900; font-stretch: 80%; font-size: clamp(2.3rem, 6vw, 4rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.cell.hot { border-top: 6px solid var(--hot); } .cell.hot .tag, .cell.hot .deg { color: var(--hot); }
+.cell.cold { border-top: 6px solid var(--cold); } .cell.cold .tag, .cell.cold .deg { color: var(--cold); }
+.cell.avg { border-top: 6px dashed var(--avg); background: var(--surface-2); }
+.cell .eq { position: absolute; left: -14px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; background: var(--fg); color: var(--bg); display: grid; place-items: center; font-family: var(--font-mono); font-weight: 500; font-size: 0.9rem; }
+.scale { background: var(--surface); border: 1px solid var(--line); padding: 16px 20px 10px; overflow-x: auto; }
+.scale svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.verdict { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; background: var(--surface); border: 1px solid var(--line); padding: 18px 20px; }
+.verdict .mark { font-family: var(--font-display); font-weight: 900; font-size: 2rem; line-height: 1; color: var(--hot); }
+
+/* Grafice */
+.chart-card { background: var(--surface); border: 1px solid var(--line); padding: 20px; display: grid; gap: 14px; min-width: 0; }
+.chart-card .title { display: grid; gap: 2px; }
+.chart-card .title strong { font-weight: 600; }
+.chart-card .title span { color: var(--muted); font-size: 0.9rem; }
+.chart-wrap { position: relative; overflow-x: auto; }
+.chart-wrap svg { display: block; width: 100%; height: auto; max-width: 100%; font-family: var(--font-body); }
+#chartWaterfall svg { min-width: 560px; }
+.chart-wrap svg text { fill: var(--fg); font-size: 12px; }
+.chart-wrap svg text.axis { fill: var(--muted); font-size: 11px; font-family: var(--font-mono); }
+.chart-wrap svg text.val { font-family: var(--font-mono); font-size: 12px; }
+.chart-wrap svg .grid { stroke: var(--line); stroke-width: 1; }
+.chart-wrap svg .zero { stroke: var(--fg); stroke-width: 1.25; }
+.chart-wrap svg .avgline { stroke: var(--avg); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.chart-wrap svg .pos { fill: var(--cold); } .chart-wrap svg .neg { fill: var(--hot); } .chart-wrap svg .tot { fill: var(--muted); }
+.chart-wrap svg .connector { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
+.chart-wrap svg .hit { fill: transparent; cursor: default; }
+.chart-wrap svg .bar { transition: opacity .15s; } .chart-wrap svg g.row:hover .bar { opacity: .8; }
+.tip { position: absolute; pointer-events: none; background: var(--fg); color: var(--bg); font-size: 0.8rem; padding: 6px 10px; border-radius: 4px; white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); opacity: 0; transition: opacity .1s; z-index: 2; }
+.tip.on { opacity: 1; }
+.tip .num { color: inherit; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px 22px; font-size: 0.85rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+.sw.pos { background: var(--cold); } .sw.neg { background: var(--hot); } .sw.tot { background: var(--muted); }
+.sw.avg { width: 18px; height: 0; border-top: 2px dashed var(--avg); border-radius: 0; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.callout { display: grid; gap: 8px; background: var(--surface-2); border: 1px solid var(--line); padding: 18px 20px; }
+.callout .big { font-family: var(--font-display); font-weight: 900; font-stretch: 85%; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.callout .big.hot { color: var(--hot); } .callout .big.cold { color: var(--cold); }
+details { background: var(--surface); border: 1px solid var(--line); }
+summary { cursor: pointer; padding: 12px 20px; font-weight: 600; font-size: 0.95rem; }
+summary:focus-visible { outline: 2px solid var(--cold); outline-offset: -2px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { text-align: left; padding: 8px 20px; border-top: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 500; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+td.n, th.n { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+td.neg { color: var(--hot); } td.pos { color: var(--cold); }
+.table-wrap { overflow-x: auto; }
+
+/* Patologii */
+.patho { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.patho .item { background: var(--surface); border: 1px solid var(--line); padding: 20px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.patho .item .k { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hot); }
+.patho .item p { font-size: 0.95rem; }
+.patho .item .fig { font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+
+/* Antidot */
+.antidote { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; align-items: start; }
+.steps { display: grid; gap: 0; background: var(--surface); border: 1px solid var(--line); }
+.step { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 16px 20px; border-top: 1px solid var(--line); }
+.step:first-child { border-top: 0; }
+.step .n { font-family: var(--font-display); font-weight: 900; font-size: 1.5rem; line-height: 1; color: var(--cold); }
+.step strong { display: block; font-weight: 600; }
+.step p { font-size: 0.93rem; color: var(--muted); }
+.matrix { background: var(--surface); border: 1px solid var(--line); padding: 20px; display: grid; gap: 12px; }
+.matrix table { font-size: 0.9rem; }
+.matrix th, .matrix td { padding: 8px 10px; }
+.matrix th:first-child, .matrix td:first-child { padding-left: 0; }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
+.pill.keep { border-color: var(--cold); color: var(--cold); }
+.pill.fix { border-color: var(--muted); color: var(--muted); }
+.pill.cut { border-color: var(--hot); color: var(--hot); }
+footer { border-top: 1px solid var(--line); padding-top: 18px; font-size: 0.85rem; color: var(--muted); display: grid; gap: 6px; }
+
+@media (max-width: 700px) {
+  .thermo, .patho, .two, .antidote { grid-template-columns: 1fr; }
+  .cell .eq { left: 50%; top: -14px; transform: translateX(-50%); }
+  .wrap { gap: 44px; padding-block: 28px 44px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Parabola statistică a lui Grigore Moisil · aplicată marjei comerciale medii</div>
+  <h1>Plita și cubul de gheață</h1>
+  <div class="quote">
+    <blockquote>„Statistic vorbind, dacă ții o mână pe plită și una pe un cub de gheață, în medie te simți foarte bine.”</blockquote>
+    <cite>Butadă atribuită matematicianului Grigore C. Moisil (1906–1973), citată în folclorul universitar românesc în mai multe variante (capul în cuptor, picioarele în frigider).</cite>
+  </div>
+  <p class="lede">Media este corectă aritmetic și falsă clinic. Același lucru se întâmplă când o companie își judecă liniile de business, diviziile sau categoriile de produse după marja medie globală: cifra e adevărată, iar decizia luată pe baza ei e greșită.</p>
+</header>
+
+<!-- 1. Parabola -->
+<section aria-labelledby="s1">
+  <div class="section-head">
+    <div class="eyebrow">1 · Parabola</div>
+    <h2 id="s1">Două extreme, o medie confortabilă</h2>
+  </div>
+  <div class="thermo">
+    <div class="cell hot">
+      <div class="tag">Mâna stângă · plita</div>
+      <div class="deg num">+90 °C</div>
+      <p>Arsură de gradul doi în câteva secunde.</p>
+    </div>
+    <div class="cell cold">
+      <div class="eq" aria-hidden="true">+</div>
+      <div class="tag">Mâna dreaptă · cubul de gheață</div>
+      <div class="deg num">−17 °C</div>
+      <p>Degerătură, pierderea sensibilității.</p>
+    </div>
+    <div class="cell avg">
+      <div class="eq" aria-hidden="true">=</div>
+      <div class="tag">Media aritmetică</div>
+      <div class="deg num">36,5 °C</div>
+      <p>Exact temperatura normală a corpului uman. Pe hârtie, pacientul este perfect sănătos.</p>
+    </div>
+  </div>
+  <div class="scale">
+    <svg viewBox="0 0 900 120" role="img" aria-label="Scară de temperatură de la minus 20 la plus 100 de grade, cu marcajele minus 17, 36,5 și 90 de grade">
+      <defs>
+        <linearGradient id="therm" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#2a78d6"/>
+          <stop offset="0.47" stop-color="#9aa3b2"/>
+          <stop offset="1" stop-color="#d03b3b"/>
+        </linearGradient>
+      </defs>
+      <!-- scara: -20 -> x=40, +100 -> x=860 ; 6.8333 px/grad -->
+      <rect x="40" y="52" width="820" height="12" rx="6" fill="url(#therm)"/>
+      <g class="axis" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">
+        <text x="40" y="92" text-anchor="middle" style="fill:var(--muted)">−20</text>
+        <text x="176.7" y="92" text-anchor="middle" style="fill:var(--muted)">0</text>
+        <text x="313.3" y="92" text-anchor="middle" style="fill:var(--muted)">20</text>
+        <text x="450" y="92" text-anchor="middle" style="fill:var(--muted)">40</text>
+        <text x="586.7" y="92" text-anchor="middle" style="fill:var(--muted)">60</text>
+        <text x="723.3" y="92" text-anchor="middle" style="fill:var(--muted)">80</text>
+        <text x="860" y="92" text-anchor="middle" style="fill:var(--muted)">100 °C</text>
+      </g>
+      <!-- -17 -> 60.5 ; 36.5 -> 426.1 ; 90 -> 791.7 -->
+      <g>
+        <line x1="60.5" y1="30" x2="60.5" y2="70" stroke="#2a78d6" stroke-width="2"/>
+        <circle cx="60.5" cy="58" r="7" fill="#2a78d6" stroke="var(--surface)" stroke-width="2"/>
+        <text x="60.5" y="22" text-anchor="start" font-size="12" font-weight="600" style="fill:var(--cold)">−17 °C gheață</text>
+      </g>
+      <g>
+        <line x1="791.7" y1="30" x2="791.7" y2="70" stroke="#d03b3b" stroke-width="2"/>
+        <circle cx="791.7" cy="58" r="7" fill="#d03b3b" stroke="var(--surface)" stroke-width="2"/>
+        <text x="791.7" y="22" text-anchor="end" font-size="12" font-weight="600" style="fill:var(--hot)">plită +90 °C</text>
+      </g>
+      <g>
+        <line x1="426.1" y1="26" x2="426.1" y2="74" stroke="var(--avg)" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text x="426.1" y="18" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--fg)">media 36,5 °C · „normal”</text>
+        <text x="426.1" y="112" text-anchor="middle" font-size="11" style="fill:var(--muted)">nicio parte a corpului nu este la această temperatură</text>
+      </g>
+    </svg>
+  </div>
+  <div class="verdict">
+    <div class="mark" aria-hidden="true">!</div>
+    <div>
+      <strong>Lecția lui Moisil:</strong> un indicator agregat descrie o stare pe care niciun element al ansamblului nu o are. Media nu minte despre ansamblu, dar tace despre părți, iar deciziile se iau asupra părților.
+    </div>
+  </div>
+</section>
+
+<!-- 2. Business -->
+<section aria-labelledby="s2">
+  <div class="section-head">
+    <div class="eyebrow">2 · Transpunerea managerială</div>
+    <h2 id="s2">Marja medie de 14,5 % și cele cinci realități din spatele ei</h2>
+    <p class="muted">Portofoliu ilustrativ al unei firme de execuție cu cinci linii de business. Cifrele sunt exemplificative, în mii lei, pe un exercițiu anual.</p>
+  </div>
+
+  <div class="chart-card">
+    <div class="title">
+      <strong>Marja de contribuție pe linie de business</strong>
+      <span>procent din veniturile liniei · linia întreruptă marchează media ponderată a portofoliului</span>
+    </div>
+    <div class="chart-wrap" id="chartMargin"></div>
+    <div class="legend">
+      <span><i class="sw pos"></i>marjă pozitivă</span>
+      <span><i class="sw neg"></i>marjă negativă</span>
+      <span><i class="sw avg"></i>media ponderată 14,5 %</span>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="callout">
+      <div class="eyebrow">Ce vede consiliul</div>
+      <div class="big num">14,5 %</div>
+      <p>O marjă medie peste costul capitalului de 12 %. Verdict agregat: „toate liniile creează valoare, extindem”.</p>
+    </div>
+    <div class="callout">
+      <div class="eyebrow">Ce se întâmplă în realitate</div>
+      <div class="big num hot">−390</div>
+      <p>mii lei pierduți anual de două linii, acoperiți tacit din profitul celorlalte trei. Niciuna dintre cele cinci linii nu are marja de 14,5 %.</p>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="title">
+      <strong>Subvenția încrucișată, pas cu pas</strong>
+      <span>contribuția fiecărei linii la rezultatul raportat, mii lei</span>
+    </div>
+    <div class="chart-wrap" id="chartWaterfall"></div>
+    <div class="legend">
+      <span><i class="sw pos"></i>linie care aduce profit</span>
+      <span><i class="sw neg"></i>linie care consumă profit</span>
+      <span><i class="sw tot"></i>subtotal și rezultat raportat</span>
+    </div>
+  </div>
+
+  <details id="dataTable">
+    <summary>Datele din spatele graficelor</summary>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Linie de business</th><th class="n">Venit (mii lei)</th><th class="n">Pondere</th><th class="n">Marjă</th><th class="n">Contribuție (mii lei)</th></tr></thead>
+        <tbody id="tbody"></tbody>
+        <tfoot><tr><th>Total portofoliu</th><th class="n">12 000</th><th class="n">100 %</th><th class="n">14,5 %</th><th class="n">1 735</th></tr></tfoot>
+      </table>
+    </div>
+  </details>
+</section>
+
+<!-- 3. Patologii -->
+<section aria-labelledby="s3">
+  <div class="section-head">
+    <div class="eyebrow">3 · Cele trei efecte toxice ale mediei</div>
+    <h2 id="s3">Ce ascunde o cifră care arată bine</h2>
+  </div>
+  <div class="patho">
+    <div class="item">
+      <div class="k">Subvenție încrucișată</div>
+      <div class="fig num">390 din 2 125</div>
+      <p>18 % din profitul generat de Instalații, Structuri și Finisaje este consumat de Mentenanță și Proiectare. Clienții liniilor profitabile plătesc, fără să știe, prețul liniilor în pierdere, iar aceia devin vulnerabili la un concurent specializat.</p>
+    </div>
+    <div class="item">
+      <div class="k">Alocarea distorsionată a capitalului</div>
+      <div class="fig num">14,5 % &gt; 12 %</div>
+      <p>Judecată pe medie, fiecare linie pare să bată costul capitalului, deci investiția se împarte proporțional cu veniturile. Mentenanța, cu 12,5 % din venituri, primește 12,5 % din buget pentru a pierde 12 bani la fiecare leu vândut.</p>
+    </div>
+    <div class="item">
+      <div class="k">Pierderi ascunse</div>
+      <div class="fig num">−35 %</div>
+      <p>Proiectarea pierde 35 % din tot ce facturează, dar la 5 % din venituri este invizibilă în agregat. Pierderea nu apare în niciun raport până când nu se dezagregă rezultatul, de obicei prea târziu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Antidot -->
+<section aria-labelledby="s4">
+  <div class="section-head">
+    <div class="eyebrow">4 · Antidotul</div>
+    <h2 id="s4">Măsoară fiecare mână separat</h2>
+  </div>
+  <div class="antidote">
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><strong>Dezagregă până la unitatea de decizie</strong><p>Linie, divizie, categorie, client mare sau contract. Nivelul la care se decide „continuăm sau nu” este nivelul la care trebuie măsurată marja.</p></div></div>
+      <div class="step"><div class="n">2</div><div><strong>Calculează marja de contribuție, nu doar adaosul</strong><p>Venit minus toate costurile direct atribuibile: manoperă, materiale, subcontractare, echipamente dedicate. Adaosul comercial ascunde costul manoperei neproductive.</p></div></div>
+      <div class="step"><div class="n">3</div><div><strong>Alocă costurile comune pe cauză, nu pe venit</strong><p>Cheia de alocare proporțională cu venitul face liniile mari să pară mai scumpe și liniile mici mai ieftine decât sunt. Folosește ore, comenzi, metri pătrați, ce generează efectiv costul.</p></div></div>
+      <div class="step"><div class="n">4</div><div><strong>Compară fiecare linie cu costul capitalului</strong><p>Pragul este același pentru toate: 12 % în exemplu. Media portofoliului nu este un prag, este un rezultat.</p></div></div>
+      <div class="step"><div class="n">5</div><div><strong>Decide pe linie, cu prag de materialitate</strong><p>Pentru fiecare linie: păstrează și extinde, repară cu termen, sau renunță. Liniile sub prag primesc un plan cu dată de reevaluare, nu subvenție pe termen nelimitat.</p></div></div>
+    </div>
+    <div class="matrix">
+      <div class="title"><strong>Aceleași cinci linii, judecate separat</strong><br><span class="muted" style="font-size:.9rem">pragul: cost al capitalului 12 %</span></div>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Linie</th><th class="n">Marjă</th><th>Decizie</th></tr></thead>
+        <tbody>
+          <tr><td>Instalații</td><td class="n pos">31 %</td><td><span class="pill keep">păstrează · extinde</span></td></tr>
+          <tr><td>Structuri</td><td class="n pos">24 %</td><td><span class="pill keep">păstrează · extinde</span></td></tr>
+          <tr><td>Finisaje</td><td class="n">6 %</td><td><span class="pill fix">repară · sub prag</span></td></tr>
+          <tr><td>Mentenanță</td><td class="n neg">−12 %</td><td><span class="pill fix">repară cu termen</span></td></tr>
+          <tr><td>Proiectare</td><td class="n neg">−35 %</td><td><span class="pill cut">renunță sau reproiectează</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="muted" style="font-size:.9rem">Cu media de 14,5 % toate cinci ar fi primit aceeași decizie: „extindem”. Cu măsurarea pe linie, două linii cresc, două se repară, una se închide. Rezultatul fără Proiectare și cu Mentenanța adusă la zero: 2 125 mii lei, cu 22 % mai mult decât raportatul de 1 735.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>Cifrele portofoliului sunt ilustrative și servesc doar demonstrației. Mecanismul, însă, este același în orice portofoliu cu dispersie a marjelor între componente.</div>
+  <div>Butada este atribuită lui Grigore Moisil în tradiția orală; formulări similare circulă și fără atribuire, ca ilustrare a limitelor mediei aritmetice.</div>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var data = [
+    { name: 'Instalații',  rev: 3100, margin: 31 },
+    { name: 'Structuri',   rev: 4200, margin: 24 },
+    { name: 'Finisaje',    rev: 2600, margin: 6 },
+    { name: 'Mentenanță',  rev: 1500, margin: -12 },
+    { name: 'Proiectare',  rev: 600,  margin: -35 }
+  ];
+  data.forEach(function (d) { d.contrib = Math.round(d.rev * d.margin / 100); });
+  var totalRev = data.reduce(function (s, d) { return s + d.rev; }, 0);
+  var totalContrib = data.reduce(function (s, d) { return s + d.contrib; }, 0);
+  var avg = totalContrib / totalRev * 100;
+
+  function fmt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function pct(n) { return (n < 0 ? '−' : '') + String(Math.abs(n)).replace('.', ',') + ' %'; }
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+  // Tabel
+  var tb = document.getElementById('tbody');
+  tb.innerHTML = data.map(function (d) {
+    var cls = d.margin < 0 ? ' neg' : ' pos';
+    return '<tr><td>' + esc(d.name) + '</td><td class="n">' + fmt(d.rev) + '</td><td class="n">' +
+      (d.rev / totalRev * 100).toFixed(1).replace('.', ',') + ' %</td><td class="n' + cls + '">' + pct(d.margin) +
+      '</td><td class="n' + cls + '">' + (d.contrib < 0 ? '−' : '') + fmt(Math.abs(d.contrib)) + '</td></tr>';
+  }).join('');
+
+  // Tooltip comun
+  function attachTip(wrap) {
+    var tip = document.createElement('div'); tip.className = 'tip'; wrap.appendChild(tip);
+    return {
+      show: function (html, evt) {
+        tip.innerHTML = html; tip.classList.add('on');
+        var r = wrap.getBoundingClientRect();
+        tip.style.left = (evt.clientX - r.left + wrap.scrollLeft) + 'px';
+        tip.style.top = (evt.clientY - r.top) + 'px';
+      },
+      hide: function () { tip.classList.remove('on'); }
+    };
+  }
+  function tipHtml(d) {
+    return '<strong>' + esc(d.name) + '</strong><br>venit <span class="num">' + fmt(d.rev) + '</span> mii lei · marjă <span class="num">' + pct(d.margin) +
+      '</span><br>contribuție <span class="num">' + (d.contrib < 0 ? '−' : '+') + fmt(Math.abs(d.contrib)) + '</span> mii lei';
+  }
+  // Bară cu capătul dinspre valoare rotunjit (4px), ancorată la linia de zero
+  function roundedBar(x, y, w, h, side) {
+    var r = Math.min(4, w / 2, h / 2);
+    if (side === 'right') return 'M' + x + ' ' + y + 'H' + (x + w - r) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + r + 'V' + (y + h - r) + 'a' + r + ' ' + r + ' 0 0 1 ' + (-r) + ' ' + r + 'H' + x + 'Z';
+    if (side === 'left') return 'M' + (x + w) + ' ' + y + 'H' + (x + r) + 'a' + r + ' ' + r + ' 0 0 0 ' + (-r) + ' ' + r + 'V' + (y + h - r) + 'a' + r + ' ' + r + ' 0 0 0 ' + r + ' ' + r + 'H' + (x + w) + 'Z';
+    if (side === 'top') return 'M' + x + ' ' + (y + h) + 'V' + (y + r) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + (-r) + 'H' + (x + w - r) + 'a' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + r + 'V' + (y + h) + 'Z';
+    return 'M' + x + ' ' + y + 'V' + (y + h - r) + 'a' + r + ' ' + r + ' 0 0 0 ' + r + ' ' + r + 'H' + (x + w - r) + 'a' + r + ' ' + r + ' 0 0 0 ' + r + ' ' + (-r) + 'V' + y + 'Z';
+  }
+
+  // Grafic 1: marja pe linie (bare orizontale)
+  (function () {
+    var wrap = document.getElementById('chartMargin');
+    var W = 720, H = 280, left = 120, right = 700, top = 34, rowH = 42, barH = 22;
+    var min = -40, max = 40, px = (right - left) / (max - min);
+    var x = function (v) { return left + (v - min) * px; };
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Marja de contribuție pe linie de business, de la minus 35 la plus 31 la sută, cu media ponderată de 14,5 la sută">';
+    [-40, -20, 0, 20, 40].forEach(function (t) {
+      s += '<line class="' + (t === 0 ? 'zero' : 'grid') + '" x1="' + x(t) + '" y1="' + (top - 10) + '" x2="' + x(t) + '" y2="' + (top + data.length * rowH) + '"/>';
+      s += '<text class="axis" x="' + x(t) + '" y="' + (top + data.length * rowH + 18) + '" text-anchor="middle">' + (t < 0 ? '−' : '') + Math.abs(t) + (t === 40 ? ' %' : '') + '</text>';
+    });
+    data.forEach(function (d, i) {
+      var y = top + i * rowH;
+      var w = Math.abs(d.margin) * px;
+      var bx = d.margin >= 0 ? x(0) + 1 : x(d.margin);
+      var cls = d.margin >= 0 ? 'pos' : 'neg';
+      s += '<g class="row" data-i="' + i + '">';
+      s += '<text x="' + (left - 12) + '" y="' + (y + barH / 2 + 4) + '" text-anchor="end" font-weight="500">' + esc(d.name) + '</text>';
+      s += '<path class="bar ' + cls + '" d="' + roundedBar(bx, y, Math.max(w - 1, 2), barH, d.margin >= 0 ? 'right' : 'left') + '"/>';
+      var lx = d.margin >= 0 ? x(d.margin) + 8 : x(d.margin) - 8;
+      s += '<text class="val" x="' + lx + '" y="' + (y + barH / 2 + 4) + '" text-anchor="' + (d.margin >= 0 ? 'start' : 'end') + '">' + pct(d.margin) + '</text>';
+      s += '<rect class="hit" x="' + left + '" y="' + (y - 6) + '" width="' + (right - left) + '" height="' + (barH + 12) + '"/>';
+      s += '</g>';
+    });
+    s += '<line class="avgline" x1="' + x(avg) + '" y1="' + (top - 16) + '" x2="' + x(avg) + '" y2="' + (top + data.length * rowH) + '"/>';
+    s += '<text x="' + (x(avg) + 6) + '" y="' + (top - 18) + '" font-size="11" font-weight="600">media ' + pct(Math.round(avg * 10) / 10) + '</text>';
+    s += '</svg>';
+    wrap.innerHTML = s;
+    var tip = attachTip(wrap);
+    wrap.querySelectorAll('g.row').forEach(function (g) {
+      var d = data[+g.getAttribute('data-i')];
+      g.addEventListener('mousemove', function (e) { tip.show(tipHtml(d), e); });
+      g.addEventListener('mouseleave', tip.hide);
+    });
+  })();
+
+  // Grafic 2: cascada contribuțiilor
+  (function () {
+    var wrap = document.getElementById('chartWaterfall');
+    var pos = data.filter(function (d) { return d.contrib >= 0; });
+    var neg = data.filter(function (d) { return d.contrib < 0; });
+    var subtotal = pos.reduce(function (a, d) { return a + d.contrib; }, 0);
+    var steps = [];
+    var run = 0;
+    pos.forEach(function (d) { steps.push({ d: d, from: run, to: run + d.contrib, type: 'pos' }); run += d.contrib; });
+    steps.push({ label: 'Profitul liniilor profitabile', from: 0, to: subtotal, type: 'tot', val: subtotal });
+    neg.forEach(function (d) { steps.push({ d: d, from: run, to: run + d.contrib, type: 'neg' }); run += d.contrib; });
+    steps.push({ label: 'Rezultat raportat', from: 0, to: run, type: 'tot', val: run });
+
+    var W = 720, H = 320, left = 60, right = 710, top = 24, bottom = 270;
+    var maxV = 2400, py = (bottom - top) / maxV;
+    var y = function (v) { return bottom - v * py; };
+    var n = steps.length, slot = (right - left) / n, barW = Math.min(64, slot - 16);
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Cascadă: cele trei linii profitabile produc 2125 mii lei, cele două în pierdere consumă 390, rezultatul raportat este 1735 mii lei">';
+    [0, 500, 1000, 1500, 2000].forEach(function (t) {
+      s += '<line class="' + (t === 0 ? 'zero' : 'grid') + '" x1="' + left + '" y1="' + y(t) + '" x2="' + right + '" y2="' + y(t) + '"/>';
+      s += '<text class="axis" x="' + (left - 8) + '" y="' + (y(t) + 4) + '" text-anchor="end">' + fmt(t) + '</text>';
+    });
+    steps.forEach(function (st, i) {
+      var cx = left + slot * i + slot / 2, bx = cx - barW / 2;
+      var hi = Math.max(st.from, st.to), lo = Math.min(st.from, st.to);
+      var by = y(hi), bh = Math.max(y(lo) - y(hi) - 1, 2);
+      var side = st.type === 'neg' ? 'bottom' : 'top';
+      s += '<g class="row" data-i="' + i + '">';
+      if (i > 0 && i < n) {
+        s += '<line class="connector" x1="' + (bx - slot + barW + 8) + '" y1="' + y(st.type === 'tot' ? st.to : st.from) + '" x2="' + bx + '" y2="' + y(st.type === 'tot' ? st.to : st.from) + '"/>';
+      }
+      s += '<path class="bar ' + st.type + '" d="' + roundedBar(bx, by, barW, bh, side) + '"/>';
+      var v = st.d ? st.d.contrib : st.val;
+      var ly = st.type === 'neg' ? y(lo) + 16 : y(hi) - 8;
+      s += '<text class="val" x="' + cx + '" y="' + ly + '" text-anchor="middle" font-weight="600">' + (v < 0 ? '−' : (st.type === 'tot' ? '' : '+')) + fmt(Math.abs(v)) + '</text>';
+      var label = st.d ? st.d.name : st.label;
+      var words = label.split(' ');
+      var l1 = words.length > 2 ? words.slice(0, 2).join(' ') : words[0];
+      var l2 = words.length > 2 ? words.slice(2).join(' ') : (words[1] || '');
+      s += '<text class="axis" x="' + cx + '" y="' + (bottom + 18) + '" text-anchor="middle">' + esc(l1) + '</text>';
+      if (l2) s += '<text class="axis" x="' + cx + '" y="' + (bottom + 32) + '" text-anchor="middle">' + esc(l2) + '</text>';
+      s += '<rect class="hit" x="' + (bx - 8) + '" y="' + top + '" width="' + (barW + 16) + '" height="' + (bottom - top) + '"/>';
+      s += '</g>';
+    });
+    s += '</svg>';
+    wrap.innerHTML = s;
+    var tip = attachTip(wrap);
+    wrap.querySelectorAll('g.row').forEach(function (g) {
+      var st = steps[+g.getAttribute('data-i')];
+      var html = st.d ? tipHtml(st.d) : '<strong>' + esc(st.label) + '</strong><br><span class="num">' + fmt(st.val) + '</span> mii lei';
+      g.addEventListener('mousemove', function (e) { tip.show(html, e); });
+      g.addEventListener('mouseleave', tip.hide);
+    });
+  })();
+})();
+</script>
+
+</body>
+</html>
